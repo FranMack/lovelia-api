@@ -1,0 +1,19 @@
+Backend Project README
+Welcome to our backend project! This repository contains the server-side code for our application.
+
+Installation
+Clone this repository to your local machine.
+Navigate to the project directory.
+Install dependencies using npm install.
+Development
+Run npm start to start the development server using nodemon for automatic server restarts on code changes.
+Access the server at http://localhost:port, where port is specified in your environment variables.
+Production
+Ensure all necessary environment variables are set for production (e.g., database connection strings, API keys).
+Use node server.js to start the server in production, rather than nodemon.
+Update any references to localhost in environment variables to the appropriate production URLs.
+Contributing
+Contributions are welcome! Please follow our contribution guidelines when making changes.
+
+License
+This project is licensed under the MIT License. See the LICENSE file for details.
