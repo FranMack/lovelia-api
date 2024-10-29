@@ -13,8 +13,6 @@ const getAlarmAndSendPushNotifications = async () => {
       // Convert current UTC time to Argentina's local time
       const argentinaTime = moment().tz("America/Argentina/Buenos_Aires");
 
-      console.log("argentinaTime: ", argentinaTime);
-
       alarms.forEach((alarm) => {
         // Assuming alarm.alarm1 is only a time string (e.g., "11:03")
         const timeString = alarm.alarm1;
@@ -26,11 +24,7 @@ const getAlarmAndSendPushNotifications = async () => {
           "America/Argentina/Buenos_Aires"
         );
 
-        console.log("alarmTime: ", alarmTime);
-
         const timeDifference = alarmTime.diff(argentinaTime);
-
-        console.log("timeDifference: ", timeDifference);
 
         if (timeDifference > 0 && timeDifference <= 5 * 60 * 1000) {
           // Less than or equal to 5 minutes

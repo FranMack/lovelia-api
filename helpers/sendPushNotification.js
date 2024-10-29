@@ -4,6 +4,18 @@ const { admin } = require("../config/firebase");
 const sendPushNotification = async (fcmToken, notification) => {
   console.log("Sending push notification");
 
+  /* const message = {
+    notification: {
+      title: notificationTitle,
+      body: notificationBody,
+    },    
+    token: recipientFcmToken, 
+    // optional
+    data: {
+      soundUrl: string
+    },
+  }; */
+
   // Use Firebase messaging API here to send the notification
   await admin
     .messaging()
