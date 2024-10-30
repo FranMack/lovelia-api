@@ -37,11 +37,14 @@ const getAlarmAndSendPushNotifications = async () => {
           );
 
           // Schedule push notification
+        
           setTimeout(async () => {
             try {
               await sendPushNotification(alarm.user_id.fcmToken, {
                 title: "Hora de meditar",
                 body: `Este es tu momento de paz interior. Tómate un tiempo para relajarte y conectar contigo mismo.`,
+              },{
+                soundUrl: alarm.sound
               });
               console.log(`Notification sent to ${alarm.user_id.email}`);
             } catch (error) {
