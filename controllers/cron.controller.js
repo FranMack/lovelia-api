@@ -7,8 +7,6 @@ const getAlarmAndSendPushNotifications = async () => {
   try {
     const alarms = await Alarm.find().populate("user_id");
 
-    console.log("alarms ==========> ", alarms);
-
     if (alarms && alarms.length > 0) {
       // Convert current UTC time to Argentina's local time
       const argentinaTime = moment().tz("America/Argentina/Buenos_Aires");
@@ -37,15 +35,19 @@ const getAlarmAndSendPushNotifications = async () => {
           );
 
           // Schedule push notification
-        
+
           setTimeout(async () => {
             try {
-              await sendPushNotification(alarm.user_id.fcmToken, {
-                title: "Hora de meditar",
-                body: `Este es tu momento de paz interior. Tómate un tiempo para relajarte y conectar contigo mismo.`,
-              },{
-                soundUrl: alarm.sound
-              });
+              await sendPushNotification(
+                alarm.user_id.fcmToken,
+                {
+                  title: "Hora de meditar",
+                  body: `Este es tu momento de paz interior. Tómate un tiempo para relajarte y conectar contigo mismo.`,
+                },
+                {
+                  soundUrl: alarm.sound,
+                }
+              );
               console.log(`Notification sent to ${alarm.user_id.email}`);
             } catch (error) {
               console.error(
