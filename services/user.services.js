@@ -67,9 +67,6 @@ class UserServices {
         throw new Error("Tu cuenta no ha sido activada");
       }
 
-
-    
-
       return user;
     } catch (error) {
       console.log(error);
@@ -284,7 +281,7 @@ class UserServices {
 
       //return userInfo
 
-      const { houseCups, chineseInfo, planets, aspects,soundPath } = userInfo;
+      const { houseCups, chineseInfo, planets, aspects, soundPath } = userInfo;
 
       const sun = planets[0].signName.toLocaleLowerCase();
       const moon = planets[1].signName.toLocaleLowerCase();
@@ -395,10 +392,7 @@ class UserServices {
         `El archivo ${fileName} ha sido guardado correctamente en el bucket ${bucketName}`
       );
 
-      console.log("infoooo", info);
-
-      return {soundPath};
-
+      return { soundPath };
     } catch (error) {
       console.log(error);
       throw error;
@@ -433,7 +427,6 @@ class UserServices {
 
   static async addIntention(intention, email) {
     try {
-
       const userInfo = await UserAstroData.findOne({ email });
       if (!userInfo) {
         throw new Error("User info can not be found");
@@ -450,12 +443,10 @@ class UserServices {
 
   static async userIntention(email) {
     try {
-
       const userInfo = await UserAstroData.findOne({ email });
       if (!userInfo) {
         throw new Error("User info can not be found");
       }
-
 
       if (!userInfo.intention) {
         return;
@@ -467,32 +458,25 @@ class UserServices {
     }
   }
 
-
-  static async sessionFmcToken(email,fcmToken){
-    try{
-    
-       const user = await User.findOne({ email});
+  static async sessionFmcToken(email, fcmToken) {
+    try {
+      const user = await User.findOne({ email });
 
       if (!user) {
         throw new Error("Credenciales erroneas");
       }
-    
-         if( user.fcmToken!==fcmToken)
-      { user.fcmToken =fcmToken;
-      await user.save();
 
+      if (user.fcmToken !== fcmToken) {
+        user.fcmToken = fcmToken;
+        await user.save();
       }
-    
-     return
-    }
-    catch (error) {
+
+      return;
+    } catch (error) {
       console.log(error);
       throw error;
     }
-      }
-
-
-
+  }
 }
 
 module.exports = UserServices;
