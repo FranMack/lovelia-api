@@ -52,4 +52,45 @@ function calcKinMaya(year, month, day) {
   };
 }
 
-module.exports = { calcKinMaya, filterTable1, filterTable2, calcSolarSail };
+//traduce el sello solar y tono cosmico a la misma notación que usan en el modelo de three js
+
+function transformSolarSail(solarSail){
+  if(solarSail==="dragon"){return "dragonRojo"}
+  if(solarSail==="wind"){return "vientoBlanco"}
+  if(solarSail==="night"){return "nocheAzul"}
+  if(solarSail==="seed"){return "semillaAmarilla"}
+  if(solarSail==="snake"){return "serpienteRoja"}
+  if(solarSail==="worldBridger"){return "enlazadorMundos"}
+  if(solarSail==="hand"){return "manoAzul"}
+  if(solarSail==="start"){return "estrellaAmarilla"}
+  if(solarSail==="moon"){return "lunaRoja"}
+  if(solarSail==="dog"){return "perroBlanco"}
+  if(solarSail==="monkey"){return "monoAzul"}
+  if(solarSail==="human"){return "humanoAmarillo"}
+  if(solarSail==="skyWalker"){return "caminanteCielo"}
+  if(solarSail==="wizard"){return "magoBlanco"}
+  if(solarSail==="eagle"){return "aguilaAzul"}
+  if(solarSail==="warrior"){return "guerreroAmarillo"}
+  if(solarSail==="earth"){return "tierraRoja"}
+  if(solarSail==="mirrow"){return "perroBlanco"}
+  if(solarSail==="storm"){return "tormentaAzul"}
+  if(solarSail==="sun"){return "espejoBlanco"}
+
+  return ""
+
+
+}
+
+function transformCosmicTone(cosmicTone){
+
+  const tones=["magnetico","lunar","autoexistente","entonado","ritmico","resonante","galactico","solar","planetario","espectral","cristal","cosmico"]
+
+  
+  return tones[cosmicTone-1]
+
+}
+
+
+
+
+module.exports = { calcKinMaya, filterTable1, filterTable2, calcSolarSail,transformSolarSail,transformCosmicTone };

@@ -8,6 +8,7 @@ const axios = require("axios");
 const { filterNatalHoroscope } = require("../helpers/filterNatalHoroscope");
 const { chineseInformation } = require("../helpers/filterChineseInfo");
 const { calcKinMaya } = require("../helpers/filterKinMaya");
+const{transformSolarSail,transformCosmicTone}=require("../helpers/filterKinMaya")
 const fs = require("fs");
 const path = require("path");
 const { Storage } = require("@google-cloud/storage");
@@ -281,8 +282,8 @@ class UserServices {
 
       //return userInfo
 
-      const { houseCups, chineseInfo, planets, aspects, soundPath } = userInfo;
-
+      const { houseCups, chineseInfo, planets, aspects, soundPath,kinMaya } = userInfo;
+      const{solarSail,cosmicTone}=kinMaya
       const sun = planets[0].signName.toLocaleLowerCase();
       const moon = planets[1].signName.toLocaleLowerCase();
       const sunHouse = planets[0].housePosition;
@@ -354,6 +355,9 @@ class UserServices {
         waterEnvironmentMap: waterEnvironmentMap,
         horoscope: horoscope,
         constellation: constellation,
+        kinMaya: transformSolarSail(solarSail),
+        tones: transformCosmicTone(cosmicTone),
+        phrase:"Activa tu talísman",
       };
 
       // Convertir el objeto a formato JSON
