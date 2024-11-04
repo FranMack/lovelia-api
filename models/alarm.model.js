@@ -23,6 +23,10 @@ const alarmSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  timezone: {
+    type: String,
+    required: true, // Ensures that a timezone is always provided
+  },
 });
 
 alarmSchema.set("toJSON", {

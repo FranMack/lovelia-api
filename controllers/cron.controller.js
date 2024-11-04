@@ -8,55 +8,73 @@ const getAlarmAndSendPushNotifications = async () => {
     const alarms = await Alarm.find().populate("user_id");
 
     if (alarms && alarms.length > 0) {
-      // Convert current UTC time to Argentina's local time
-      const argentinaTime = moment().tz("America/Argentina/Buenos_Aires");
-
       alarms.forEach((alarm) => {
-        // Assuming alarm.alarm1 is only a time string (e.g., "11:03")
-        const timeString = alarm.alarm1;
+        // Fallback to a default time zone
+        const userTimeZone = alarm.timezone || "America/Cordoba";
 
-        // Combine with current date to make a complete datetime in Argentina time zone
-        const alarmTime = moment.tz(
-          `${argentinaTime.format("YYYY-MM-DD")} ${timeString}`,
-          "YYYY-MM-DD HH:mm",
-          "America/Argentina/Buenos_Aires"
-        );
+        // Convert current UTC time to user's local time
+        const currentTime = moment().tz(userTimeZone);
 
-        const timeDifference = alarmTime.diff(argentinaTime);
+        // Array of all possible alarm times
+        const alarmTimes = [
+          alarm.alarm1,
+          alarm.alarm2,
+          alarm.alarm3,
+          alarm.alarm4,
+        ];
 
-        if (timeDifference > 0 && timeDifference <= 5 * 60 * 1000) {
-          // Less than or equal to 5 minutes
-          console.log(
-            `Scheduling notification for user: ${alarm.user_id.fcmToken} - ${
-              alarm.user_id.name
-            }, email: ${alarm.user_id.email} in ${
-              timeDifference / 1000
-            } seconds`
-          );
+        // Iterate over each alarm time
+        alarmTimes.forEach((timeString, index) => {
+          if (timeString) {
+            // Combine with current date to make a complete datetime in user's time zone
+            const alarmTime = moment.tz(
+              `${currentTime.format("YYYY-MM-DD")} ${timeString}`,
+              "YYYY-MM-DD HH:mm",
+              userTimeZone
+            );
 
-          // Schedule push notification
+            const timeDifference = alarmTime.diff(currentTime);
 
-          setTimeout(async () => {
-            try {
-              await sendPushNotification(
-                alarm.user_id.fcmToken,
-                {
-                  title: "Hora de meditar",
-                  body: `Este es tu momento de paz interior. Tómate un tiempo para relajarte y conectar contigo mismo.`,
-                },
-                {
-                  soundUrl: alarm.sound,
+            if (timeDifference > 0 && timeDifference <= 5 * 60 * 1000) {
+              // Less than or equal to 5 minutes
+              console.log(
+                `Scheduling notification for user: ${
+                  alarm.user_id.fcmToken
+                } - ${alarm.user_id.name}, email: ${
+                  alarm.user_id.email
+                } for alarm${index + 1} in ${timeDifference / 1000} seconds`
+              );
+
+              // Schedule push notification
+              setTimeout(async () => {
+                try {
+                  await sendPushNotification(
+                    alarm.user_id.fcmToken,
+                    {
+                      title: "Hora de meditar",
+                      body: `Este es tu momento de paz interior. Tómate un tiempo para relajarte y conectar contigo mismo.`,
+                    },
+                    {
+                      soundUrl: alarm.sound,
+                    }
+                  );
+                  console.log(
+                    `Notification sent to ${alarm.user_id.email} for alarm${
+                      index + 1
+                    }`
+                  );
+                } catch (error) {
+                  console.error(
+                    `Failed to send notification to ${
+                      alarm.user_id.email
+                    } for alarm${index + 1}:`,
+                    error
+                  );
                 }
-              );
-              console.log(`Notification sent to ${alarm.user_id.email}`);
-            } catch (error) {
-              console.error(
-                `Failed to send notification to ${alarm.user_id.email}:`,
-                error
-              );
+              }, timeDifference);
             }
-          }, timeDifference);
-        }
+          }
+        });
       });
     } else {
       console.log("No alarms found");
