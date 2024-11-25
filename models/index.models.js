@@ -5,6 +5,7 @@ const Billing = require("./billing.model");
 const Delivery = require("./delivery.model");
 const TemporaryTransaction = require("./transactionAuxiliar.model");
 const Alarm = require("./alarm.model");
+const TalismanDigital=require("./talismanDigital.model")
 
 module.exports = {
   User,
@@ -12,6 +13,7 @@ module.exports = {
   Product,
   Billing,
   Delivery,
+  TalismanDigital,
   TemporaryTransaction,
   Alarm,
 };

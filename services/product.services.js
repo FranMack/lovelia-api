@@ -1,18 +1,14 @@
 const { User, Product, Delivery, Billing } = require("../models/index.models");
 
 class ProductServices {
-  static addProduct = async (productList, deliveryDetails, billingDetails) => {
+  static addProduct = async (productList, delivery_id, billing_id) => {
     try {
       // Verificar que el array de productos no esté vacío
       if (productList.length === 0) {
         throw new Error("No products provided");
       }
 
-      const deliveryInfo = await Delivery.create(deliveryDetails);
 
-      const billingInfo = billingDetails.payment_id
-        ? await Billing.create(billingDetails)
-        : null;
 
       const products = productList.map((item) => {
         // Extraer los valores del documento y convertir a objeto plano
@@ -24,8 +20,8 @@ class ProductServices {
           intention: item.intention,
           price: item.price,
           quantity: item.quantity,
-          delivery_id: deliveryInfo._id,
-          billing_id: billingInfo ? billingInfo._id : null,
+          delivery_id: delivery_id,
+          billing_id: billing_id ? billing_id : null,
         };
 
         return productData;

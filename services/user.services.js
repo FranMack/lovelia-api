@@ -1,5 +1,10 @@
 const { envs } = require("../config/env.config");
-const { User, UserAstroData } = require("../models/index.models");
+const { kingMayaInfo,chineseHoroscopeInfo,tonesInfo,sunHouseInfo,moonHouseInfo,sunInfo,moonInfo,planetsAndAspectsInfo,ascendantInfo} = require("../utils");
+const {
+  User,
+  UserAstroData,
+  TalismanDigital,
+} = require("../models/index.models");
 const {
   generateTokenConfirmAcount,
   validateTokenConfirmAcoubt,
@@ -8,45 +13,50 @@ const axios = require("axios");
 const { filterNatalHoroscope } = require("../helpers/filterNatalHoroscope");
 const { chineseInformation } = require("../helpers/filterChineseInfo");
 const { calcKinMaya } = require("../helpers/filterKinMaya");
-const{transformSolarSail,transformCosmicTone}=require("../helpers/filterKinMaya")
+const {
+  transformSolarSail,
+} = require("../helpers/filterKinMaya");
 const fs = require("fs");
 const path = require("path");
+const { timeConverter } = require("../helpers/getDate");
 const { Storage } = require("@google-cloud/storage");
 
 class UserServices {
   static async register(data) {
     try {
-      const existingUser = await User.findOne({ email: data.email });
+      const [existingUser, hasTalismanDigital] = await Promise.all([
+        User.findOne({ email: data.email }),
+        TalismanDigital.findOne({ email: data.email }),
+      ]);
 
       if (existingUser) {
-        if (
-          existingUser.email === data.email &&
-          existingUser.confirm === true
-        ) {
+        // Si el usuario ya está registrado y confirmado
+        if (existingUser.confirm) {
           throw new Error("Usuario ya registrado");
         }
-
-        if (
-          existingUser.email === data.email &&
-          existingUser.confirm === false
-        ) {
-          return existingUser;
-        }
+        // Si el usuario está registrado pero no confirmado
+        return existingUser;
       }
 
+      // Si el usuario no existe, lo creamos
       const newUser = await User.create(data);
-      const payload = {
+      newUser.token = generateTokenConfirmAcount({
         email: newUser.email,
         id: newUser._id,
-      };
+      });
 
-      const token = generateTokenConfirmAcount(payload);
-      newUser.token = token;
+      // Si tiene un TalismanDigital, se marca como pagado
+
+      if (hasTalismanDigital) {
+        newUser.payment = true;
+        newUser.confirm = true;
+      }
+
       await newUser.save();
 
       return newUser;
     } catch (error) {
-      console.log(error);
+      console.error("Error en el registro:", error.message);
       throw error;
     }
   }
@@ -68,7 +78,14 @@ class UserServices {
         throw new Error("Tu cuenta no ha sido activada");
       }
 
-      return user;
+      const talismanDigital = await TalismanDigital.findOne({
+        email: data.email,
+      });
+
+      const talismanActivated =
+        talismanDigital && talismanDigital.activated ? true : false;
+
+      return { ...user._doc, talismanActivated };
     } catch (error) {
       console.log(error);
       throw error;
@@ -270,10 +287,10 @@ class UserServices {
       const [buckets] = await storage.getBuckets();
 
       const [files] = await storage.bucket(bucketName).getFiles();
-      console.log("Archivos en el bucket:");
+     /* console.log("Archivos en el bucket:");
       files.forEach((file) => {
         console.log(file.name);
-      });
+      });*/
 
       const userInfo = await UserAstroData.findOne({ email });
       if (!userInfo) {
@@ -282,8 +299,16 @@ class UserServices {
 
       //return userInfo
 
-      const { houseCups, chineseInfo, planets, aspects, soundPath,kinMaya } = userInfo;
-      const{solarSail,cosmicTone}=kinMaya
+      const {
+        houseCups,
+        chineseInfo,
+        planets,
+        aspects,
+        soundPath,
+        kinMaya,
+        intention,
+      } = userInfo;
+      const { solarSail, cosmicTone } = kinMaya;
       const sun = planets[0].signName.toLocaleLowerCase();
       const moon = planets[1].signName.toLocaleLowerCase();
       const sunHouse = planets[0].housePosition;
@@ -356,34 +381,17 @@ class UserServices {
         horoscope: horoscope,
         constellation: constellation,
         kinMaya: transformSolarSail(solarSail),
-        tones: transformCosmicTone(cosmicTone),
-        phrase:"Activa tu talísman",
+        tones: cosmicTone,
+        phrase: intention ? intention : "Activa tu talísman",
       };
 
+
+     
       // Convertir el objeto a formato JSON
       const jsonData = JSON.stringify(info); // null y 2 son para pretty printing
 
       // Nombre del archivo JSON
       const fileName = `public/api/${email}.json`;
-
-      /* // Directorio donde deseamos guardar el archivo
-      const directory = path.resolve(__dirname, "../public/api");
-
-      // Nombre del archivo JSON
-      const fileName = `${email}.json`;
-
-      // Ruta completa del archivo
-      const filePath = `${directory}/${fileName}`;
-
-      // Escribir el archivo JSON en disco
-      fs.writeFile(filePath, jsonData, (err) => {
-        if (err) throw err;
-        console.log(
-          `El archivo ${fileName} ha sido guardado correctamente en ${directory}`
-        );
-      });
-
-      return filePath;*/
 
       // Crear un buffer a partir del JSON string
       const buffer = Buffer.from(jsonData);
@@ -396,7 +404,52 @@ class UserServices {
         `El archivo ${fileName} ha sido guardado correctamente en el bucket ${bucketName}`
       );
 
-      return { soundPath };
+
+      //INFO PARA ADN ENERGETICO
+
+      const kingMayaUserInfo = kingMayaInfo[solarSail]
+      const tonesUserInfo=tonesInfo[cosmicTone]
+      const chineseUserInfo = {
+        commonInfo: chineseHoroscopeInfo[chineseInfo.animal].commonInfo,
+        particularInfo: chineseHoroscopeInfo[chineseInfo.animal][chineseInfo.element],
+      };
+
+      const ascendantUserInfo=ascendantInfo[houseCups.signName];
+      const sunHouseUserInfo=sunHouseInfo[sunHouse]
+      const moonHouseUserInfo=moonHouseInfo[moonHouse]
+      const sunUserInfo=sunInfo[planets[0].signName]
+
+      console.log("xxxxxxxmoonInfoxxxxxxxx",planets[1].signName)
+      const moonUserInfo=moonInfo[planets[1].signName]
+      const aspectsUserInfo=aspects.map((aspect)=>{
+        return {planet:planetsAndAspectsInfo.planets[aspect.aspectedPlanet],aspect:planetsAndAspectsInfo.aspects[aspect.aspectType]}
+      })
+
+      const aspectsAndPlanetsUserInfo={
+        generalInfo:planetsAndAspectsInfo.generalInfo,
+        userAspects:aspectsUserInfo
+      }
+
+      //estas propiedads debería dejar de pasarlas para la creación del json del usuario en google cloud cuando actualicen el talismán
+
+      return {
+        soundPath,
+        numerologySymbol: info.numerology,
+        chinseseSymbol:horoscope,
+        solarSailSymbol: solarSail,
+        toneSymbol: info.tones,
+        constellation,
+        phrase: info.phrase,
+        kingMayaUserInfo,
+        tonesUserInfo,
+        chineseUserInfo,
+        ascendantUserInfo,
+        sunHouseUserInfo,
+        moonHouseUserInfo,
+        sunUserInfo,
+        moonUserInfo,
+        aspectsAndPlanetsUserInfo:aspectsUserInfo.length>0 ?aspectsAndPlanetsUserInfo:null
+      };
     } catch (error) {
       console.log(error);
       throw error;
@@ -476,6 +529,82 @@ class UserServices {
       }
 
       return;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  static async activateTalisman(userInfo, authToken) {
+    const { location, day, month, year, hour, min, meridiam, email } = userInfo;
+
+    try {
+      await TalismanDigital.findOneAndUpdate(
+        { email },
+        { activated: true },
+        { new: true }
+      );
+
+      const { data } = await axios.post(
+        `${envs.DOMAIN_URL}/api/v1/user/birthPlace`,
+        { birthPlace: location, email: email },
+        {
+          withCredentials: true,
+          headers: {
+            Cookie: `token=${authToken}`,
+          },
+        }
+      );
+      const { coordinates, timeZone } = data;
+
+      const natalHoroscope = await axios.post(
+        `${envs.DOMAIN_URL}/api/v1/user/natalHoroscope`,
+        {
+          email: email,
+          lat: coordinates.lat,
+          lon: coordinates.lng,
+          tzone: timeZone,
+          year,
+          month,
+          day,
+          hour: timeConverter(hour, meridiam),
+          min,
+        },
+        {
+          withCredentials: true,
+          headers: {
+            Cookie: `token=${authToken}`,
+          },
+        }
+      );
+
+      return;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  static async checkTalismanAcounts(talismanAcounts) {
+    try {
+      if (talismanAcounts.length < 1) {
+        throw new Error("No acounts cehcked");
+      }
+
+      const promises = talismanAcounts.map((email) => {
+        return TalismanDigital.findOne({ email });
+      });
+      const acounts = await Promise.all(promises);
+
+      const acountsProcessed = acounts.map((items) => {
+        if (items) {
+          return items.email;
+        } else {
+          return null;
+        }
+      });
+
+      return acountsProcessed;
     } catch (error) {
       console.log(error);
       throw error;

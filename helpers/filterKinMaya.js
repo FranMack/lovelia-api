@@ -36,19 +36,20 @@ function calcSolarSail(position) {
 //Principal
 
 function calcKinMaya(year, month, day) {
+
+  const tones=["magnetico","lunar","electrico","autoexistente","entonado","ritmico","resonante","galactico","solar","planetario","espectral","cristal","cosmico"]
   const step1 = filterTable1(year);
   const step2 = filterTable2(month);
   const step3 = step1 + step2 + day;
-
   const kin = step3 > 260 ? step3 - 260 : step3;
-  const cosmicTone = kin % 13;
+  const cosmicToneIndex = kin % 13;
   const solarSailPosition = kin % 20;
   const solarSail = calcSolarSail(solarSailPosition);
 
   return {
     kin,
     solarSail,
-    cosmicTone,
+    cosmicTone:tones[cosmicToneIndex-1]
   };
 }
 
@@ -81,16 +82,9 @@ function transformSolarSail(solarSail){
 
 }
 
-function transformCosmicTone(cosmicTone){
-
-  const tones=["magnetico","lunar","autoexistente","entonado","ritmico","resonante","galactico","solar","planetario","espectral","cristal","cosmico"]
-
-  
-  return tones[cosmicTone-1]
-
-}
 
 
 
 
-module.exports = { calcKinMaya, filterTable1, filterTable2, calcSolarSail,transformSolarSail,transformCosmicTone };
+
+module.exports = { calcKinMaya, filterTable1, filterTable2, calcSolarSail,transformSolarSail };

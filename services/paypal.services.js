@@ -1,20 +1,52 @@
 const { envs } = require("../config/env.config");
-const { TemporaryTransaction, Billing } = require("../models/index.models");
+const {
+  User,
+  TalismanDigital,
+  TemporaryTransaction,
+  Delivery,
+  Billing,
+} = require("../models/index.models");
 const axios = require("axios");
 const ProductServices = require("../services/product.services");
 const { getDate, timeConverter } = require("../helpers/getDate");
-const { shopingDetailsEmail } = require("../helpers/mailer");
+const { shopingDetailsEmail,sendTalismanDigitalActivation,shopingDetailsEmail2 } = require("../helpers/mailer");
 
 class PaypalServices {
   static async createOrder(data) {
-    const { email, items, productDetails, billingDetails, deliveryDetails } =
-      data;
+    const {
+      buyerInfo,
+      items,
+      productDetails,
+      deliveryDetails,
+      billingDetails,
+      talismanDigitalOwners,
+    } = data;
     try {
-      const temporaryInfo = await TemporaryTransaction.create({
+      const{email,name,lastname}=buyerInfo
+
+      const temporaryInfoObject = {
         billingInfo: billingDetails,
-        deliveryInfo: deliveryDetails,
-        itemsInfo: productDetails,
+      };
+
+      const talismanAnalogicDetails = productDetails.filter((item) => {
+        if (item.model !== "Digital") {
+          return item;
+        }
       });
+      console.log("iiiiiiiiiiiiiiiiii", talismanAnalogicDetails);
+
+      if (talismanAnalogicDetails.length > 0) {
+        temporaryInfoObject.deliveryInfo = deliveryDetails;
+        temporaryInfoObject.itemsInfo = talismanAnalogicDetails;
+      }
+
+      if (talismanDigitalOwners) {
+        temporaryInfoObject.talismanDigitalInfo = talismanDigitalOwners;
+      }
+
+      const temporaryInfo = await TemporaryTransaction.create(
+        temporaryInfoObject
+      );
       const temporaryInfoId = temporaryInfo.id;
 
       const order = {
@@ -41,7 +73,7 @@ class PaypalServices {
               locale: "en-US",
               landing_page: "NO_PREFERENCE",
               user_action: "PAY_NOW",
-              return_url: `${envs.DOMAIN_URL}/api/v1/payment-paypal/capture-order?email=${email}&temporary_info_id=${temporaryInfoId}`,
+              return_url: `${envs.DOMAIN_URL}/api/v1/payment-paypal/capture-order?email=${email}&name=${name}&lastname=${lastname}&temporary_info_id=${temporaryInfoId}`,
               cancel_url: `${envs.DOMAIN_URL}/api/v1/payment-paypal/cancel-order`,
             },
           },
@@ -81,7 +113,7 @@ class PaypalServices {
     }
   }
 
-  static async captureOrder(email, token, temporary_info_id) {
+  static async captureOrder({ token, email,name,lastname,temporary_info_id }) {
     try {
       const params = new URLSearchParams();
       params.append("grant_type", "client_credentials");
@@ -110,6 +142,10 @@ class PaypalServices {
       const paymentData = response.data;
       const payment_id = paymentData.purchase_units[0].payments.captures[0].id;
       const status = paymentData.purchase_units[0].payments.captures[0].status;
+      const date = getDate();
+
+      //VER COMO GENERAR NUMERO DE ORDEN
+      const order_id = Math.round(Math.random() * 100000);
 
       const existingTransaction = await Billing.findOne({
         payment_id,
@@ -121,36 +157,65 @@ class PaypalServices {
       }
 
       if (status === "COMPLETED") {
-        const date = getDate();
-
-        //VER COMO GENERAR NUMERO DE ORDEN
-        const order_id = Math.round(Math.random() * 100000);
-
         const temporaryInfo = await TemporaryTransaction.findById(
           temporary_info_id
         );
-        const { billingInfo, deliveryInfo, itemsInfo } = temporaryInfo;
+        const { billingInfo } = temporaryInfo;
 
-        const productDetails = itemsInfo;
-        const deliveryDetails = deliveryInfo;
+        console.log("TTTTTTTTTTTTTTTTTT", temporaryInfo);
+
+        const productDetails = temporaryInfo?.itemsInfo;
+        const deliveryDetails = temporaryInfo?.deliveryInfo;
         const billingDetails = {
           ...billingInfo,
           email,
           date,
           order_id,
           payment_id,
-          payment_method: "Paypal",
+          payment_method: "PayPal",
         };
 
-        const productListDB = productDetails
-          ? await ProductServices.addProduct(
-              productDetails,
-              deliveryDetails,
-              billingDetails
-            )
-          : null;
+        const billingInfoDB = await Billing.create(billingDetails);
 
-        shopingDetailsEmail(email, productDetails, deliveryDetails, order_id);
+        if (temporaryInfo.itemsInfo.length > 0) {
+          const deliveryInfo = await Delivery.create(deliveryDetails);
+
+          const productListDB = productDetails
+            ? await ProductServices.addProduct(
+                productDetails,
+                deliveryInfo._id,
+                billingInfoDB._id
+              )
+            : null;
+        }
+
+        if (temporaryInfo.talismanDigitalInfo.length > 0) {
+          const promises = temporaryInfo.talismanDigitalInfo.map(
+            async (item) => {
+              // Crear un registro en TalismanDigital
+              await TalismanDigital.create({
+                email: item.email,
+                billing_id: billingInfoDB._id,
+              });
+
+              await sendTalismanDigitalActivation(item.email)
+
+              // Buscar el usuario y actualizar su estado de pago si existe
+              const user = await User.findOneAndUpdate(
+                { email: item.email },
+                { payment: true },
+                { new: true } // Devuelve el usuario actualizado
+              );
+            }
+          );
+
+          // Ejecutar todas las promesas al mismo tiempo
+          const result = await Promise.all(promises);
+        }
+        //enviar mail con detalle de compra
+
+     
+        shopingDetailsEmail2(email, productDetails, deliveryDetails, order_id,name,lastname);
 
         return;
       } else {

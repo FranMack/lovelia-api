@@ -25,7 +25,7 @@ const userAstroDataSchema = new mongoose.Schema({
   kinMaya:{
     kin:Number,
     solarSail:String,
-    cosmicTone:Number
+    cosmicTone:String
   },
   soundPath:{
     type:String

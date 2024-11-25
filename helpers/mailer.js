@@ -1,15 +1,16 @@
 const { envs } = require("../config/env.config");
 const transporter = require("../config/mailerTransporter");
 
-const {MailTemplate1}=require("../assets/mailTemplates")
+const { MailTemplate1,MailTemplate2 } = require("../assets/mailTemplates");
 
 async function sendRegistrationEmail(destinatario, nombreUsuario, token) {
   const link = `${envs.DOMAIN_URL}/api/v1/user/confirmAcount/${token}`;
-  const title="Te damos la bienvenida a"
-  const content="Por favor, confirma tu correo para ingresar a tu cuenta. Solo tenemos que verificar tu dirección de correo electrónico para finalizar la configuración de tu cuenta."
-  const buttonText="CONFIRMAR CUENTA"
+  const title = "Te damos la bienvenida a Lovelia";
+  const content =
+    "Por favor, confirma tu correo para ingresar a tu cuenta. Solo tenemos que verificar tu dirección de correo electrónico para finalizar la configuración de tu cuenta.";
+  const buttonText = "CONFIRMAR CUENTA";
 
-  const html =MailTemplate1(nombreUsuario,title,content,link,buttonText);
+  const html = MailTemplate1(nombreUsuario, title, content, link, buttonText);
 
   const mailOptions = {
     from: `Lovelia <${envs.USER_MAILER}>`,
@@ -28,10 +29,11 @@ async function sendRegistrationEmail(destinatario, nombreUsuario, token) {
 
 async function forgetPasswordEmail(destinatario, nombreUsuario, token) {
   const link = `${envs.FRONT_URL}/reset-password/?token=${token}`;
-  const content="Si no hiciste este pedido, por favor ignora este mail.Para hacerlo, haz clic en el siguiente botón:"
- const title="Recibimos una solicitud para cambiar tu contraseña."
-  const buttonText="RESTABLECER CONTRASEÑA"
-  const html =MailTemplate1(nombreUsuario,title,content,link,buttonText);
+  const content =
+    "Si no hiciste este pedido, por favor ignora este mail.Para hacerlo, haz clic en el siguiente botón:";
+  const title = "Recibimos una solicitud para cambiar tu contraseña.";
+  const buttonText = "RESTABLECER CONTRASEÑA";
+  const html = MailTemplate1(nombreUsuario, title, content, link, buttonText);
 
   const mailOptions = {
     from: `Lovelia <${envs.USER_MAILER}>`,
@@ -64,8 +66,12 @@ async function consultEmail(name, message, email, subject) {
   }
 }
 
-async function shopingDetailsEmail(destinatario,products,deliveryInfo,orderId) {
-
+async function shopingDetailsEmail(
+  destinatario,
+  products,
+  deliveryInfo,
+  orderId
+) {
   const productList = products.map((item) => {
     return `<p>${item.model} (${item.material}-${item.rock}-${item.chain}-${item.intention})</p> \n`;
   });
@@ -155,14 +161,14 @@ async function shopingDetailsEmail(destinatario,products,deliveryInfo,orderId) {
   }
 }
 
-
 async function sendSubscriptionEmail(destinatario, nombreUsuario) {
   const link = "";
-  const title="Tu subscripción ha sido activada."
-  const content="Conectate con tu esencia y tu proposito con ayuda de tu talismán digital."
-  const buttonText=""
+  const title = "Tu subscripción ha sido activada.";
+  const content =
+    "Conectate con tu esencia y tu proposito con ayuda de tu talismán digital.";
+  const buttonText = "";
 
-  const html =MailTemplate1(nombreUsuario,title,content,link,buttonText);
+  const html = MailTemplate1(nombreUsuario, title, content, link, buttonText);
 
   const mailOptions = {
     from: `Lovelia <${envs.USER_MAILER}>`,
@@ -179,6 +185,81 @@ async function sendSubscriptionEmail(destinatario, nombreUsuario) {
   }
 }
 
+async function sendTalismanDigitalActivation(destinatario) {
+  const link = `${envs.FRONT_URL}/login`;
+  const title =
+    " Tu talismán digital está alineado y listo para desplegar toda su energía";
+  const content =
+    "Si ya formas parte del universo de Lovelia, solo necesitas iniciar sesión y dirigirte a la sección de tu perfil para activar este poderoso símbolo de protección y guía.\n \n Si aún no has creado tu cuenta, el cosmos te invita a dar el primer paso y registrarte. El destino te espera, ¡es momento de activar la magia que te pertenece! 🌙🔮";
+  
+    const buttonText = "Activar mi talismán";
+
+    const nombreUsuario=""
+
+  const html = MailTemplate1(nombreUsuario, title, content, link, buttonText);
+
+  const mailOptions = {
+    from: `Lovelia <${envs.USER_MAILER}>`,
+    to: destinatario,
+    subject: "Talismán Digital Lovelia",
+    html: html,
+  };
+
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    return info;
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+
+async function shopingDetailsEmail2(
+  destinatario,
+  products,
+  deliveryInfo,
+  orderId,
+  name,
+  lastname
+) {
+
+  const productList = products.map((item) => {
+    if (!item.model || !item.material || !item.rock || !item.chain || !item.intention) {
+      // Evita agregar una fila si algún campo necesario está vacío
+      return '';
+    }
+    return ` <tr>
+                <th>${item.model}</th>
+                <th>${item.material}</th>
+                <th>${item.rock}</th>
+                <th>${item.chain}</th>
+                <th>${item.intention}</th>
+              </tr>`;
+  }).join('')
+
+  const html = MailTemplate2(productList, deliveryInfo, orderId,name,lastname)
+
+  const mailOptions = {
+    from: `Lovelia <${envs.USER_MAILER}>`,
+    to: destinatario,
+    subject: "shoping details",
+    html: html,
+  };
+
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    return info;
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+
+
+
+
 
 
 module.exports = {
@@ -186,5 +267,7 @@ module.exports = {
   forgetPasswordEmail,
   consultEmail,
   shopingDetailsEmail,
-  sendSubscriptionEmail
+  sendSubscriptionEmail,
+  sendTalismanDigitalActivation,
+  shopingDetailsEmail2
 };

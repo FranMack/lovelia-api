@@ -850,7 +850,7 @@ userRouter.get(
 );
 
 
-
+userRouter.post("/activate-talisman",validateAuth,UserControllers.activateTalisman)
 
 
 userRouter.get("/me/:fcmToken", validateAuth, UserControllers.sessionFmcToken);
@@ -858,5 +858,6 @@ userRouter.get("/me/:fcmToken", validateAuth, UserControllers.sessionFmcToken);
 userRouter.post("/consult",UserControllers.formConsult)
 
 userRouter.post("/cleanUserJSON",validateAuth,UserControllers.cleanUserJSON)
+userRouter.post("/check-talisman-acounts",UserControllers.checkTalismanAcounts)
 
 module.exports = userRouter;

@@ -19,10 +19,10 @@ class PaypalControllers {
   }
 
   static async captureOrder(req, res) {
-    const { token, email,temporary_info_id } = req.query;
+    const { token, email,name,lastname,temporary_info_id } = req.query;
     try {
      
-        const payment_id = await PaypalServices.captureOrder(email,token,temporary_info_id);
+        const payment_id = await PaypalServices.captureOrder(req.query);
 
     
           res.redirect( `${envs.FRONT_URL}`);

@@ -132,11 +132,7 @@ mercadopagoRouter.get("/failure",(req,res)=>{
 mercadopagoRouter.get("/pending",(req,res)=>{
     res.send("pending")
 })
-mercadopagoRouter.post("/create-subscription-plan",MercadopagoControllers.createSubscriptionPlan)
-mercadopagoRouter.get("/plan/:preApprovalPlanId",MercadopagoControllers.getSubscriptionPlan)
-mercadopagoRouter.get("/subscriptors",MercadopagoControllers.subscriptorsStatus)
-mercadopagoRouter.post("/subscribe",validateAuth,MercadopagoControllers.paySubscription)
-mercadopagoRouter.put("/cancel-subscription",validateAuth,MercadopagoControllers.cancelSubscription)
+
 
 
 

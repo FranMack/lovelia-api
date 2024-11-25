@@ -2,8 +2,9 @@ const { envs } = require("../config/env.config");
 const {
   User,
   Product,
+  TalismanDigital,
   TemporaryTransaction,
-  UserAstroData,
+  Delivery,
   Billing,
 } = require("../models/index.models");
 const {
@@ -18,7 +19,7 @@ const ProductServices = require("../services/product.services");
 const { getDate, timeConverter } = require("../helpers/getDate");
 const {
   shopingDetailsEmail,
-  sendSubscriptionEmail,
+  sendTalismanDigitalActivation
 } = require("../helpers/mailer");
 const axios = require("axios");
 
@@ -28,14 +29,43 @@ const client = new MercadoPagoConfig({
 
 class MercadopagoServices {
   static async createOrder(data) {
-    const { email, items, productDetails, deliveryDetails, billingDetails } =
-      data;
+    const {
+      email,
+      items,
+      productDetails,
+      deliveryDetails,
+      billingDetails,
+      talismanDigitalOwners,
+    } = data;
     try {
-      const temporaryInfo = await TemporaryTransaction.create({
+      console.log("iteemssssssssssss", items);
+      console.log("productDetailsssssssssss", productDetails);
+
+      console.log("ownersssssssssssss", talismanDigitalOwners);
+
+      const temporaryInfoObject = {
         billingInfo: billingDetails,
-        deliveryInfo: deliveryDetails,
-        itemsInfo: productDetails,
+      };
+
+      const talismanAnalogicDetails = productDetails.filter((item) => {
+        if (item.model !== "Digital") {
+          return item;
+        }
       });
+      console.log("iiiiiiiiiiiiiiiiii", talismanAnalogicDetails);
+
+      if (talismanAnalogicDetails.length > 0) {
+        temporaryInfoObject.deliveryInfo = deliveryDetails;
+        temporaryInfoObject.itemsInfo = talismanAnalogicDetails;
+      }
+
+      if (talismanDigitalOwners) {
+        temporaryInfoObject.talismanDigitalInfo = talismanDigitalOwners;
+      }
+
+      const temporaryInfo = await TemporaryTransaction.create(
+        temporaryInfoObject
+      );
       const temporaryInfoId = temporaryInfo.id;
 
       const successUrl = envs.FRONT_URL;
@@ -101,10 +131,12 @@ class MercadopagoServices {
           const temporaryInfo = await TemporaryTransaction.findById(
             temporaryInfoId
           );
-          const { billingInfo, deliveryInfo, itemsInfo } = temporaryInfo;
+          const { billingInfo } = temporaryInfo;
 
-          const productDetails = itemsInfo;
-          const deliveryDetails = deliveryInfo;
+          console.log("TTTTTTTTTTTTTTTTTT", temporaryInfo);
+
+          const productDetails = temporaryInfo?.itemsInfo;
+          const deliveryDetails = temporaryInfo?.deliveryInfo;
           const billingDetails = {
             ...billingInfo,
             email,
@@ -114,14 +146,38 @@ class MercadopagoServices {
             payment_method: "Mercado Pago",
           };
 
-          const productListDB = productDetails
-            ? await ProductServices.addProduct(
-                productDetails,
-                deliveryDetails,
-                billingDetails
-              )
-            : null;
+          const billingInfoDB = await Billing.create(billingDetails);
 
+          if (temporaryInfo.itemsInfo.length > 0) {
+            const deliveryInfo = await Delivery.create(deliveryDetails);
+
+            const productListDB = productDetails
+              ? await ProductServices.addProduct(
+                  productDetails,
+                  deliveryInfo._id,
+                  billingInfoDB._id
+                )
+              : null;
+          }
+
+          if (temporaryInfo.talismanDigitalInfo.length > 0) {
+            const promises = temporaryInfo.talismanDigitalInfo.map(
+              async (item) => {
+                // Crear un registro en TalismanDigital
+                await TalismanDigital.create({ email: item.email,billing_id:billingInfoDB._id });
+
+                // Buscar el usuario y actualizar su estado de pago si existe
+                const user = await User.findOne({ email: item.email });
+                if (user) {
+                  user.payment = true;
+                  await user.save();
+                }
+              }
+            );
+
+            // Ejecutar todas las promesas al mismo tiempo
+            const result = await Promise.all(promises);
+          }
           //enviar mail con detalle de compra
           shopingDetailsEmail(email, productDetails, deliveryDetails, order_id);
 
@@ -130,220 +186,6 @@ class MercadopagoServices {
           throw new Error(`Payment went wrong: payment status: ${status}`);
         }
       }
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  }
-
-  static async createSubscriptionPlan() {
-    try {
-      const preapproval_plan = new PreApprovalPlan(client);
-
-      const newPlan = await preapproval_plan.create({
-        body: {
-          reason: "Lovelia talismán",
-          auto_recurring: {
-            frequency: 1,
-            frequency_type: "months",
-            repetitions: 12,
-            billing_day: 10,
-            billing_day_proportional: true,
-            free_trial: {
-              frequency: 1,
-              frequency_type: "months",
-            },
-
-            transaction_amount: 15,
-            currency_id: "ARS",
-          },
-          payment_methods_allowed: {
-            payment_types: [
-              // Especificar tipos de pago permitidos
-              { id: "credit_card" },
-              { id: "debit_card" },
-            ],
-            payment_methods: [
-              // Especificar métodos de pago permitidos
-              { id: "visa" },
-              { id: "master" },
-              { id: "amex" },
-              { id: "cabal" },
-              { id: "naranja" },
-              { id: "maestro" },
-              { id: "cabal_debito" },
-            ],
-          },
-          back_url: "https://022e-190-228-241-76.ngrok-free.app",
-        },
-      });
-
-      return newPlan;
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  }
-
-  static async getSubscriptionPlan(preApprovalPlanId) {
-    try {
-      const preApprovalPlan = new PreApprovalPlan(client);
-
-      const plan = await preApprovalPlan.get({
-        preApprovalPlanId: preApprovalPlanId,
-      });
-
-      return plan;
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  }
-
-  static async paySubscription(data, authToken) {
-    const { payer, token, user_email, userInfo } = data;
-
-    try {
-      const user = await User.findOne({ email: user_email });
-
-      if (!user) {
-        throw new Error("Wrong Credentials");
-      }
-      if (!user.confirm) {
-        throw new Error("Your account is not confirmed");
-      }
-      if (user.payment && user.payer_id) {
-        throw new Error(
-          "The subscription for this account has already been paid"
-        );
-      }
-
-      const preApproval = new PreApproval(client);
-
-      const plan = await preApproval.create({
-        body: {
-          preapproval_plan_id: envs.MERCADO_PAGO_SUBSCRIPTION_PLAN_ID,
-          reason: "Lovelia talisman",
-          payer_email: payer.email,
-          card_token_id: token,
-          auto_recurring: {
-            frequency: 1,
-            frequency_type: "months",
-            transaction_amount: 15,
-            currency_id: "ARS",
-          },
-          back_url: `${envs.FRONT_URL}/profile`,
-          status: "authorized",
-        },
-      });
-
-      if (plan.status === "authorized") {
-        user.payment = true;
-        user.payer_id = plan.payer_id;
-        user.subscription_id = plan.id;
-        await user.save();
-
-        const { location, day, month, year, hour, min, meridiam } = userInfo;
-
-        const { data } = await axios.post(
-          `${envs.DOMAIN_URL}/api/v1/user/birthPlace`,
-          { birthPlace: location, email: user_email },
-          {
-            withCredentials: true,
-            headers: {
-              Cookie: `token=${authToken}`,
-            },
-          }
-        );
-        const { coordinates, timeZone } = data;
-
-        const natalHoroscope = await axios.post(
-          `${envs.DOMAIN_URL}/api/v1/user/natalHoroscope`,
-          {
-            email: user_email,
-            lat: coordinates.lat,
-            lon: coordinates.lng,
-            tzone: timeZone,
-            year,
-            month,
-            day,
-            hour: timeConverter(hour, meridiam),
-            min,
-          },
-          {
-            withCredentials: true,
-            headers: {
-              Cookie: `token=${authToken}`,
-            },
-          }
-        );
-
-        sendSubscriptionEmail(user_email, user.name);
-
-        return plan;
-      } else {
-        throw new Error("Error al procesar el pago (back)");
-      }
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  }
-
-  static async subscriptorsStatus() {
-    try {
-      const preApproval = new PreApproval(client);
-      const options = {
-        status: "authorized",
-      };
-
-      const subscriptors = await preApproval.search({ options });
-
-      return subscriptors;
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  }
-
-  static async cancelSubscription(email) {
-    try {
-      const user = await User.findOne({ email });
-
-      if (!user) {
-        throw new Error("User not found");
-      }
-      if (!user.payment || !user.subscription_id) {
-        throw new Error("The subscription was already inactive");
-      }
-
-      const subscriptionId = user.subscription_id;
-
-      const client = new MercadoPagoConfig({
-        accessToken: envs.MERCADO_PAGO_TOKEN,
-      });
-
-      const preApproval = new PreApproval(client);
-
-      const updateSubscription = await preApproval.update({
-        id: subscriptionId,
-        body: {
-          status: "cancelled",
-        },
-      });
-
-      const userAstroData = await UserAstroData.findOne({ email });
-      if (userAstroData) {
-        await UserAstroData.deleteMany({ email });
-      }
-
-      user.payment = false;
-      user.subscription_id = "";
-      user.payer_id = "";
-
-      await user.save();
-
-      return;
     } catch (error) {
       console.log(error);
       throw error;

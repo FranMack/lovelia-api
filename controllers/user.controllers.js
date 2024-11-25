@@ -40,15 +40,23 @@ class UserControllers {
         id: newUser._id,
       };
 
-      const token = generateTokenConfirmAcount(payload);
+      if(!newUser.confirm){
+        const token = generateTokenConfirmAcount(payload);
 
-      await sendRegistrationEmail(newUser.email, newUser.name, token);
+        await sendRegistrationEmail(newUser.email, newUser.name, token);
+  
+       return  res.status(200).json({
+          message:
+            "Your account has been created successfully, you will then receive an email that will allow you to confirm your account",
+        });
 
-      res.status(200).json({
-        message:
-          "Your account has been created successfully, you will then receive an email that will allow you to confirm your account",
-      });
+      }
+
+      res.status(200).json({acountCreated:"ok",acountConfirmed:true})
+
+     
     } catch (error) {
+      console.log(error);
       if (error.response) {
         res.status(error.response.status).json({ error: error.message });
       } else {
@@ -66,6 +74,8 @@ class UserControllers {
         return res.status(400).json({ error: errors.array() });
       }
       const user = await UserServices.login(data);
+
+     
 
       const payload = {
         email: user.email,
@@ -85,6 +95,7 @@ class UserControllers {
         token,
         lastname: user.lastname,
         subscription: user.payment,
+        talismanActivated:user.talismanActivated
       });
     } catch (error) {
       console.log(error);
@@ -344,6 +355,43 @@ catch (error) {
     res.status(400).json({ error: error.message });
   }
 }
+  }
+
+  static async activateTalisman(req,res){
+    const authToken = req.cookies.token;
+    try{
+      const activation =await UserServices.activateTalisman(req.body,authToken)
+
+      res.status(200).json("Digital talisman activated")
+    }
+    catch (error) {
+      console.log(error)
+      if (error.response) {
+        res.status(error.response.status).json({ error: error.message });
+      } else {
+        res.status(400).json({ error: error.message });
+      }
+    }
+
+  }
+
+  static async checkTalismanAcounts(req,res){
+    const {talismanAcounts}=req.body;
+    try{
+
+      const acounts= await UserServices.checkTalismanAcounts(talismanAcounts)
+
+      res.status(200).json(acounts)
+
+    }
+    catch (error) {
+      console.log(error)
+      if (error.response) {
+        res.status(error.response.status).json({ error: error.message });
+      } else {
+        res.status(400).json({ error: error.message });
+      }
+    }
   }
 }
 
