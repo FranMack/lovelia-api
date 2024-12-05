@@ -3,11 +3,15 @@ const ChatServices = require("../services/chat.services");
 class ChatControllers {
   // Method to store a new chat
   static async storeChat(req, res) {
-    const { text } = req.body; // Extract chat text from request body
+    const { text, sender } = req.body; // Extract chat text from request body
     const { id: userId } = req.user; // Extract user ID from authenticated user
 
     try {
-      const newChat = await ChatServices.storeChat({ text, user_id: userId });
+      const newChat = await ChatServices.storeChat({
+        user_id: userId,
+        text,
+        sender,
+      });
       res.status(200).json(newChat);
     } catch (error) {
       if (error.response) {
