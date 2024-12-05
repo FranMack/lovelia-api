@@ -817,7 +817,7 @@ userRouter.patch(
   UserControllers.changePassword
 );
 userRouter.get("/logout", validateAuth, UserControllers.logout);
-userRouter.post("/birthPlace",validateAuth, UserControllers.birthPlace);
+userRouter.post("/birthPlace", UserControllers.birthPlace);
 userRouter.post(
   "/natalHoroscope",validateAuth,
   UserControllers.natalHoroscope

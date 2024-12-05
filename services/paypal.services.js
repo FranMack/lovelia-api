@@ -7,7 +7,7 @@ const {
   Billing,
 } = require("../models/index.models");
 const axios = require("axios");
-const ProductServices = require("../services/product.services");
+const SoldProductServices = require("../services/soldProduct.services");
 const { getDate, timeConverter } = require("../helpers/getDate");
 const { shopingDetailsEmail,sendTalismanDigitalActivation,shopingDetailsEmail2 } = require("../helpers/mailer");
 
@@ -181,7 +181,7 @@ class PaypalServices {
           const deliveryInfo = await Delivery.create(deliveryDetails);
 
           const productListDB = productDetails
-            ? await ProductServices.addProduct(
+            ? await SoldProductServices.addProduct(
                 productDetails,
                 deliveryInfo._id,
                 billingInfoDB._id

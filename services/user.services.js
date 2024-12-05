@@ -1,5 +1,16 @@
 const { envs } = require("../config/env.config");
-const { kingMayaInfo,chineseHoroscopeInfo,tonesInfo,sunHouseInfo,moonHouseInfo,sunInfo,moonInfo,planetsAndAspectsInfo,ascendantInfo} = require("../utils");
+const {
+  kingMayaInfo,
+  chineseHoroscopeInfo,
+  tonesInfo,
+  sunHouseInfo,
+  moonHouseInfo,
+  sunInfo,
+  moonInfo,
+  planetsAndAspectsInfo,
+  ascendantInfo,
+  numberInfo,
+} = require("../utils");
 const {
   User,
   UserAstroData,
@@ -13,9 +24,7 @@ const axios = require("axios");
 const { filterNatalHoroscope } = require("../helpers/filterNatalHoroscope");
 const { chineseInformation } = require("../helpers/filterChineseInfo");
 const { calcKinMaya } = require("../helpers/filterKinMaya");
-const {
-  transformSolarSail,
-} = require("../helpers/filterKinMaya");
+const { transformSolarSail } = require("../helpers/filterKinMaya");
 const fs = require("fs");
 const path = require("path");
 const { timeConverter } = require("../helpers/getDate");
@@ -287,7 +296,7 @@ class UserServices {
       const [buckets] = await storage.getBuckets();
 
       const [files] = await storage.bucket(bucketName).getFiles();
-     /* console.log("Archivos en el bucket:");
+      /* console.log("Archivos en el bucket:");
       files.forEach((file) => {
         console.log(file.name);
       });*/
@@ -385,8 +394,6 @@ class UserServices {
         phrase: intention ? intention : "Activa tu talísman",
       };
 
-
-     
       // Convertir el objeto a formato JSON
       const jsonData = JSON.stringify(info); // null y 2 son para pretty printing
 
@@ -404,38 +411,52 @@ class UserServices {
         `El archivo ${fileName} ha sido guardado correctamente en el bucket ${bucketName}`
       );
 
-
       //INFO PARA ADN ENERGETICO
-
-      const kingMayaUserInfo = kingMayaInfo[solarSail]
-      const tonesUserInfo=tonesInfo[cosmicTone]
+      const numberUserInfo = numberInfo[chineseInfo.number];
+      const kingMayaUserInfo = kingMayaInfo[solarSail];
+      const tonesUserInfo = tonesInfo[cosmicTone];
       const chineseUserInfo = {
         commonInfo: chineseHoroscopeInfo[chineseInfo.animal].commonInfo,
-        particularInfo: chineseHoroscopeInfo[chineseInfo.animal][chineseInfo.element],
+        particularInfo:
+          chineseHoroscopeInfo[chineseInfo.animal][chineseInfo.element],
       };
 
-      const ascendantUserInfo=ascendantInfo[houseCups.signName];
-      const sunHouseUserInfo=sunHouseInfo[sunHouse]
-      const moonHouseUserInfo=moonHouseInfo[moonHouse]
-      const sunUserInfo=sunInfo[planets[0].signName]
+      const ascendantUserInfo = ascendantInfo[houseCups.signName];
+      const sunHouseUserInfo = sunHouseInfo[sunHouse];
+      const moonHouseUserInfo = moonHouseInfo[moonHouse];
+      const sunUserInfo = sunInfo[planets[0].signName];
+      const moonUserInfo = moonInfo[planets[1].signName];
+      const aspectsUserInfo = aspects.map((aspect) => {
+        return {
+          planet: planetsAndAspectsInfo.planets[aspect.aspectedPlanet],
+          aspect: planetsAndAspectsInfo.aspects[aspect.aspectType].title,
+        };
+      });
 
-      console.log("xxxxxxxmoonInfoxxxxxxxx",planets[1].signName)
-      const moonUserInfo=moonInfo[planets[1].signName]
-      const aspectsUserInfo=aspects.map((aspect)=>{
-        return {planet:planetsAndAspectsInfo.planets[aspect.aspectedPlanet],aspect:planetsAndAspectsInfo.aspects[aspect.aspectType]}
-      })
+      const filterAspects = () => {
+        const aspectsDB = aspects.map((aspect) => {
+          return aspect.aspectType;
+        });
+        const borroDuplicados = Array.from(new Set(aspectsDB));
+        const finalArray = borroDuplicados.map((aspect) => {
+          return planetsAndAspectsInfo.aspects[aspect];
+        });
 
-      const aspectsAndPlanetsUserInfo={
-        generalInfo:planetsAndAspectsInfo.generalInfo,
-        userAspects:aspectsUserInfo
-      }
+        return finalArray;
+      };
+
+      const aspectsAndPlanetsUserInfo = {
+        generalInfo: planetsAndAspectsInfo.generalInfo,
+        userAspects: aspectsUserInfo,
+        filterAspects: filterAspects(),
+      };
 
       //estas propiedads debería dejar de pasarlas para la creación del json del usuario en google cloud cuando actualicen el talismán
 
       return {
         soundPath,
         numerologySymbol: info.numerology,
-        chinseseSymbol:horoscope,
+        chinseseSymbol: horoscope,
         solarSailSymbol: solarSail,
         toneSymbol: info.tones,
         constellation,
@@ -448,7 +469,9 @@ class UserServices {
         moonHouseUserInfo,
         sunUserInfo,
         moonUserInfo,
-        aspectsAndPlanetsUserInfo:aspectsUserInfo.length>0 ?aspectsAndPlanetsUserInfo:null
+        aspectsAndPlanetsUserInfo:
+          aspectsUserInfo.length > 0 ? aspectsAndPlanetsUserInfo : null,
+        numberUserInfo,
       };
     } catch (error) {
       console.log(error);

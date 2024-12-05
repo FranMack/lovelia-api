@@ -20,7 +20,7 @@ const kingMayaInfo = {
     ],
   },
   night: {
-    title: "Noche Azuk",
+    title: "Noche Azul",
     text: [
       "El sello Noche Azul simboliza la capacidad de conexión con el mundo interior y el inconsciente. Reconoce que adentro de cada uno se encuentra todo lo necesario, aunque en ocasiones pueda permanecer oculto.",
       "Este símbolo refleja las profundidades del ser, desde donde parten los sueños a concretarse en la realidad. Aquellos que llevan este sello maya tienden a ser personas reservadas, cautelosas, analíticas y dotadas de una intuición aguda. Generalmente no exhiben su potencial abiertamente, prefiriendo observar y reservar sus habilidades para momentos específicos.",

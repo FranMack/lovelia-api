@@ -25,7 +25,7 @@ const chineseHoroscopeInfo = {
         "La Rata de Fuego lleva en su seno la contradicción. A las personas con este signo y elemento les cuesta tomar decisiones, por lo que tampoco logran tener calma y tranquilidad dentro suyo. Son rebeldes y anticonformistas, por lo que en ocasiones pueden sentirse prisioneras de las convenciones de la vida cotidiana.",
       ],
     },
-    Water: {
+    Watter: {
       title: "Rata de Agua",
       text: [
         "El Agua confiere a la Rata una tranquilidad difícil de quebrar. Sus acciones estarán dirigidas por la bondad y la delicadeza. Son capaces de superar obstáculos con entereza, constancia y paciencia. Abordan las cuestiones con suavidad, simbolizando que lo blando puede vencer a lo duro.",
@@ -47,7 +47,7 @@ const chineseHoroscopeInfo = {
     Metal: { title: "Búfalo de Metal", text: ["El Metal hará del Búfalo un ser muy exigente y de difícil trato, ya que su perfeccionismo le llevará a criticar todo lo que hagan sus semejantes."] },
     Earth: { title: "Búfalo de Tierra", text: ["La Tierra le confiere al Búfalo la fuerza para superar cualquier situación difícil y para trabajar con empeño en la tarea que se proponga. Esto puede acarrearle algún problema con su grupo social, que le puede cuestionar ser en ocasiones introvertido. Ante esto, el Búfalo sentirá deseos de evitar que lo critiquen y buscará la soledad y cambiar de ambiente."] },
     Fire: { title: "Búfalo de Tierra", text: ["La lentitud característica del Búfalo, símbolo de paciencia y perseverancia, se ve amenazada por la rapidez y la intensidad del Fuego. Esta combinación puede generar ansiedad, especialmente cuando el Búfalo está cercano a alcanzar resultados significativos en sus proyectos. A pesar de esta tensión, es crucial que el Búfalo supere cualquier signo de desánimo y continúe adelante con determinación."] },
-    Water: { title: "Búfalo de Agua", text: ["El elemento Agua sugiere una tendencia del Búfalo a la introspección y la reflexión. Las características más notables de estas personas incluyen una gran complejidad y una cierta contradicción en su personalidad, además de la seriedad."] },
+    Watter: { title: "Búfalo de Agua", text: ["El elemento Agua sugiere una tendencia del Búfalo a la introspección y la reflexión. Las características más notables de estas personas incluyen una gran complejidad y una cierta contradicción en su personalidad, además de la seriedad."] },
     Wood: { title: "Búfalo de Madera", text: ["La influencia de la Madera hará reflexionar al Búfalo cuando se encuentre en situaciones adversas: frenará su agresividad y le ayudará a ser más complaciente y menos impresionable."] },
   },
   Tiger: {
@@ -59,7 +59,7 @@ const chineseHoroscopeInfo = {
     Metal: { title: "Tigre de Metal", text: ["El Tigre de Metal se caracteriza por su lucidez y búsqueda de la perfección, lo que puede llevarlo a ser crítico con los demás, generando conflictos en sus relaciones interpersonales. Ante estas circunstancias, puede aislarse para evitar juicios, aunque esa soledad no sea deseada. Este Tigre posee una sabiduría silenciosa que le permite enseñar a través de su ejemplo más que por medio de la palabra. "] },
     Earth: { title: "Tigre de Tierra", text: ["La Tierra confiere al Tigre una exagerada prudencia a sus acciones. A veces, esta característica los lleva a la inactividad debido a la lentitud en la toma de decisiones. Sin embargo, es importante no confundir su naturaleza reflexiva con una simple búsqueda de tranquilidad y paz."] },
     Fire: { title: "Tigre de Fuego", text: ["Los Tigres de Fuego buscan indefectiblemente soluciones a todo, pero nunca están conformes con los resultados.  Casi siempre, debido a su franqueza, se hallan solos. Esto hace que mediante la fantasía construyan un mundo a su antojo aunque sea ficticio."] },
-    Water: { title: "Tigre de Agua", text: ["El agua proporciona serenidad al Tigre, especialmente cuando ante circunstancias adversas se vuelve agresivo. Bajo la influencia de este elemento, lo blando vence a lo duro y lo flexible a lo rígido."] },
+    Watter: { title: "Tigre de Agua", text: ["El agua proporciona serenidad al Tigre, especialmente cuando ante circunstancias adversas se vuelve agresivo. Bajo la influencia de este elemento, lo blando vence a lo duro y lo flexible a lo rígido."] },
     Wood: { title: "Tigre de Madera", text: ["Influenciado por el elemento Madera, este Tigre se caracteriza por su capacidad para dominar situaciones adversas a través de su resistencia y dedicación. Su aguda lucidez mental le permite anticipar eventos que, si no se manejan, podrían tener consecuencias significativas."] },
   },
   Rabbit: {
@@ -71,7 +71,7 @@ const chineseHoroscopeInfo = {
     Metal: { title: "Gato de Metal", text: ["El Gato de Metal tiende a ser directo y claro, pero también rígido en su comportamiento. Aunque busca evitar confrontaciones y mantenerse al margen de los conflictos, a veces le cuesta adaptarse a los matices y ser suave en las relaciones con los demás, lo cual es importante que aprendan a hacer."] },
     Earth: { title: "Gato de Tierra", text: ["Bajo la influencia de la Tierra, el Gato se sentirá en su ambiente ideal y las condiciones serán perfectas para que pueda armonizar su vida con la naturaleza y encontrar tranquilidad. Buscará crear un espacio seguro donde protegerse de los problemas y sentirá que ha llegado el momento de ser auténtico, sin miedo a las críticas. ya que está convencido de estar en lo cierto."] },
     Fire: { title: "Gato de Fuego", text: ["Con el Fuego el Gato se convierte en creador y recibe un impulso vital que le dará la energía que necesita para lanzarse hacia una vida plena sin estar condicionado por la prudencia. Es importante que esta potencia se encamine hacia la creación y que no lo agote por abusar de ella."] },
-    Water: { title: "Gato de Agua", text: ["El Gato de Agua tiende a sentirse más cómodo en la tranquilidad y la calma. Su enfoque principal será construir un refugio donde pueda resguardarse y protegerse de situaciones que lo abrumen. Gran parte de su comportamiento se debe a una profunda timidez y a su deseo de evitar enfrentamientos."] },
+    Watter: { title: "Gato de Agua", text: ["El Gato de Agua tiende a sentirse más cómodo en la tranquilidad y la calma. Su enfoque principal será construir un refugio donde pueda resguardarse y protegerse de situaciones que lo abrumen. Gran parte de su comportamiento se debe a una profunda timidez y a su deseo de evitar enfrentamientos."] },
     Wood: { title: "Gato de Madera", text: ["El Gato influenciado por la Madera experimenta un renacimiento de su flexibilidad que le permite desplazarse fuera de su zona de confort sin miedo. Descubre que las dificultades externas no son tan amenazantes como temía, lo que le da confianza. Se destaca por su elegancia, atractivo y sensibilidad innata que se reflejan en su manera de moverse, expresarse y reaccionar. Estas cualidades, junto con su flexibilidad, le permiten vivir con mayor libertad"] },
   },
   Dragon: {
@@ -83,7 +83,7 @@ const chineseHoroscopeInfo = {
     Metal: { title: "Dragón de Metal", text: ["El Metal está asociado al frío y a la oscuridad de la noche y, en las personas nacidas bajo el signo Dragón, a estados de inquietud e intranquilidad. Bajo estas influencias, podría verse propenso a renunciar a la acción en situaciones difíciles, adoptando una postura de cautela para evitar el sufrimiento ante posibles desilusiones."] },
     Earth: { title: "Dragón de Tierra", text: ["La Tierra, con sus múltiples capas, desde las más superficiales hasta las más profundas, refleja la complejidad de este Dragón, ya que le otorga una personalidad multifacética. Siempre hay algo nuevo por descubrir en estas personas, lo cual las hace sorprendentes y únicas. Esto también puede representar un desafío para quienes buscan conocer su esencia."] },
     Fire: { title: "Dragón de Fuego", text: ["El Fuego influye notablemente en el comportamiento del Dragón, haciéndolo enérgico e inquieto. Existe en estos seres una tendencia a la preocupación continua, que es importante identificar para evitar el desgaste de su energía vital. "] },
-    Water: { title: "Dragón de Agua", text: ["El Agua le otorga al Dragón un carácter y una naturaleza equilibrados que se traduce en una profunda preocupación por los demás, lo que a menudo les impulsa a seguir caminos de humanitarismo y altruismo."] },
+    Watter: { title: "Dragón de Agua", text: ["El Agua le otorga al Dragón un carácter y una naturaleza equilibrados que se traduce en una profunda preocupación por los demás, lo que a menudo les impulsa a seguir caminos de humanitarismo y altruismo."] },
     Wood: { title: "Dragón de Madera", text: ["El Dragón influido por la Madera es capaz de sobreponerse al desaliento. Aunque a veces puede sentirse algo pesimista, tiene la capacidad de superar las dificultades. Suele actuar de manera reflexiva y a enseñar a través de su ejemplo, sin necesidad de palabras."] },
   },
   Snake: {
@@ -96,7 +96,7 @@ const chineseHoroscopeInfo = {
     Metal: { title: "Serpiente de Metal", text: ["Bajo el elemento Metal, la Serpiente puede sentirse sometida a presiones y contradicciones internas que pueden desgastarla y hacerla sentir derrotada o manejada."] },
     Earth: { title: "Serpiente de Tierra", text: ["La Serpiente influenciada por la Tierra tienen una inclinación hacia la reflexión y el pensamiento profundo. En ocasiones pueden sentir que pierden interés por cosas que antes creían importantes y pasar de la acción a la inactividad, por lo que necesitarán estímulos significativos para superar esta fase."] },
     Fire: { title: "Serpiente de Fuego", text: ["El Fuego le confiere a la Serpiente una fuerte tendencia a resolver sus asuntos de manera independiente, sin buscar ayuda externa, lo que a menudo refuerza su individualidad. Debido a esta inclinación, puede ser percibida como autosuficiente y orgullosa. "] },
-    Water: { title: "Serpiente de Agua", text: ["Influenciada por el Agua, la Serpiente es receptiva e intuitiva y tiene la capacidad de resolver o solucionar conflictos de manera inteligente. Esta combinación le proporciona equilibrio y refleja los principios de dualidad."] },
+    Watter: { title: "Serpiente de Agua", text: ["Influenciada por el Agua, la Serpiente es receptiva e intuitiva y tiene la capacidad de resolver o solucionar conflictos de manera inteligente. Esta combinación le proporciona equilibrio y refleja los principios de dualidad."] },
     Wood: { title: "Serpiente de Madera", text: ["Lo Serpiente influenciada por el elemento Madera tiende a encerrarse en sí misma, lo que puede causarle angustia. Este elemento también puede intensificar sus emociones, haciendo que busque atraer a su vida todo lo que considere beneficioso, ya sea material o espiritual. A veces, esto puede hacer que parezca excesivamente interesada en su propio bienestar."] },
   },
   Horse: {
@@ -109,7 +109,7 @@ const chineseHoroscopeInfo = {
     Metal: { title: "Caballo de Metal", text: ["Influenciado por el Metal, que simboliza fortaleza y resistencia, el Caballo tiene gran capacidad para enfrentar desafíos con determinación. Tiende a preocuparse tanto por ayudar a los demás como por sí mismo, por lo que gana el respeto y reconocimiento de sus amigos y conocidos. Prefiere la acción a la inactividad y rara vez se queja de las dificultades, mostrando una notable capacidad para superar obstáculos."] },
     Earth: { title: "Caballo de Tierra", text: ["La Tierra le otorga al Caballo una gran intuición y una inteligencia notable. Sin embargo, a pesar de su capacidad intelectual, no siempre obtendrá los resultados esperados en sus proyectos. Esto puede deberse a que por su naturaleza confiada y por su apertura otros se aprovechen de su talento y habilidades. "] },
     Fire: { title: "Caballo de Fuego", text: ["El Fuego intensifica la prisa y actividad del Caballo. En ocasiones sus acciones tenderán a ser impredecibles y estarán cargadas de ansiedad e intranquilidad."] },
-    Water: { title: "Caballo de Agua", text: ["El Caballo de Agua puede manifestar una sensación de conflicto interno, una lucha entre su deseo de tranquilidad y su impulso hacia la acción, lo que a su vez puede generarle cierta inestabilidad y desborde emocional."] },
+    Watter: { title: "Caballo de Agua", text: ["El Caballo de Agua puede manifestar una sensación de conflicto interno, una lucha entre su deseo de tranquilidad y su impulso hacia la acción, lo que a su vez puede generarle cierta inestabilidad y desborde emocional."] },
     Wood: { title: "Caballo de Madera", text: ["Influenciado por el elemento Madera, el Caballo será más pausado y sereno. La Madera incide para frenar sus instintos ciegos en determinadas ocasiones."] },
   },
   Goat: {
@@ -122,7 +122,7 @@ const chineseHoroscopeInfo = {
     Metal: { title: "Cabra de Metal", text: ["El Metal le brinda a la Cabra características relacionadas con el perfeccionismo y la rigurosidad en sus proyectos o acciones. Este elemento le confiere creatividad y perspicacia, por lo que, a veces, puede sentirse autosuficiente."] },
     Earth: { title: "Cabra de Metal", text: ["La Cabra, influenciada por el elemento Tierra, se caracteriza por la búsqueda de estabilidad y conexión con el entorno, así como por su capacidad de aceptar y adaptarse a los cambios. Esto refleja una mentalidad abierta, que ve el progreso de manera positiva. Estas personas son flexibles ante diversas situaciones, lo que les permite superar obstáculos."] },
     Fire: { title: "Cabra de Fuego", text: ["La influencia del Fuego en la Cabra otorga a estos nativos un carácter vehemente, especialmente cuando enfrentan conflictos en sus relaciones sociales. Esta combinación intensifica la energía y actividad del signo."] },
-    Water: { title: "Cabra de Agua", text: ["El elemento Agua aporta al carácter de la Cabra una dimensión apacible y moderada. Esta combinación crea un equilibrio beneficioso, en el que las acciones se llevan a cabo con cuidado y reflexión. Aunque este enfoque puede percibirse como lentitud en sus logros, la moderación y la paciencia le permitirán una realización más equilibrada de sus objetivos."] },
+    Watter: { title: "Cabra de Agua", text: ["El elemento Agua aporta al carácter de la Cabra una dimensión apacible y moderada. Esta combinación crea un equilibrio beneficioso, en el que las acciones se llevan a cabo con cuidado y reflexión. Aunque este enfoque puede percibirse como lentitud en sus logros, la moderación y la paciencia le permitirán una realización más equilibrada de sus objetivos."] },
     Wood: { title: "Cabra de Madera", text: ["Los nacidos bajo el signo Cabra e influenciados por la Madera poseen una presencia distintiva y un porte que capta la atención de quienes los rodean. La Madera también introduce una ambivalencia y dualidad en su carácter, que puede llevarlos a adoptar decisiones y comportamientos contradictorios."] },
   },
   Monkey: {
@@ -133,9 +133,9 @@ const chineseHoroscopeInfo = {
         "Está en actividad constantemente, necesita estar haciendo cosas y estudiando otras."
       ] },
     Metal: { title: "Mono de Metal", text: ["El Metal influye en el comportamiento del Mono, guiando sus acciones hacia la obtención de resultados concretos y prácticos. Esta influencia puede llevarlo a seguir las costumbres tradicionales y resistirse al progreso, encapsulando su personalidad en una especie de caparazón que dificulta la innovación."] },
-    Earth: { title: "Mono de Tierra", text: [""] },
+    Earth: { title: "Mono de Tierra", text: ["Influenciado por la Tierra, el Mono adopta una visión más materialista y se distancia del idealismo. Su experiencia y conocimiento se centran en apoyar a quienes tienen mayores oportunidades de éxito, por lo que su inteligencia se convierte en un recurso estratégico."] },
     Fire: { title: "Mono de Fuego", text: ["La influencia del Fuego crea una combinación dinámica, que aviva y potencia la inteligencia natural del Mono y que le permite denmostrar un alto potencial creativo y de liderazgo."] },
-    Water: { title: "Mono de Agua", text: ["El Agua influencia al Mono inclinándolo hacia la introspección. Este Mono tiende a buscar el origen de las cosas, prefiriendo entender los fundamentos en lugar de quedar atrapado en las apariencias. Esta combinación puede aportar más emocionalidad y una comprensión más profunda del entorno."] },
+    Watter: { title: "Mono de Agua", text: ["El Agua influencia al Mono inclinándolo hacia la introspección. Este Mono tiende a buscar el origen de las cosas, prefiriendo entender los fundamentos en lugar de quedar atrapado en las apariencias. Esta combinación puede aportar más emocionalidad y una comprensión más profunda del entorno."] },
     Wood: { title: "Mono de Madera", text: ["La Madera imprime en el Mono un carácter tranquilo y reflexivo.  Su naturaleza apasionada se atenúa y es reemplazada por la serenidad al momento de tomar decisiones. Este Mono es propenso a actuar de manera pausada y equilibrada."] },
   },
   Rooster: {
@@ -148,7 +148,7 @@ const chineseHoroscopeInfo = {
     Metal: { title: "Gallo de Metal", text: ["El Gallo bajo la influencia del Metal actúa con convicciones férreas y de manera fría, lo que puede llevar a malentendidos con su entorno. En ocasiones puede ser difícil de tratar, incluso para sus seres más cercanos, lo que puede acarrearle críticas que lo lleven a replegarse en sí mismo. El Metal le proporciona al Gallo una coraza para que se proteja de las agresiones externas y forje su voluntad fuerte e incorruptible."] },
     Earth: { title: "Gallo de Tierra", text: ["Este Gallo tiene modos cálidos y suaves y actúa de manera equilibrada a la hora de enfrentar asuntos delicados. La influencia de la Tierra le proporciona moderación, lo que favorece tanto al nativo de este signo como a quienes lo rodean."] },
     Fire: { title: "Gallo de Fuego", text: ["El Gallo influenciado por el elemento Fuego puede ver su energía natural contrarrestada por la dificultad de superar los obstáculos que se presentan en su vida, lo que lo lleva a enfrentar constantes desafíos. Si bien no suele pedir ayuda, la agradece y acepta cuando se la ofrecen."] },
-    Water: { title: "Gallo de Agua", text: ["El Agua modera el dinamismo y el instinto natural del Gallo, por lo que suele tratarse de personas apacibles y tranquilas que tienden a resolver asuntos mediante la razón en lugar de actuar por instinto."] },
+    Watter: { title: "Gallo de Agua", text: ["El Agua modera el dinamismo y el instinto natural del Gallo, por lo que suele tratarse de personas apacibles y tranquilas que tienden a resolver asuntos mediante la razón en lugar de actuar por instinto."] },
     Wood: { title: "Gallo de Madera", text: ["El elemento Madera suaviza la tensión natural del Gallo y promueve efectos saludables, reflexión y pausa. Estas personas tienden a resolver conflictos de manera colaborativa, consultando al resto de los involucrados."] },
   },
   Dog: {
@@ -162,7 +162,7 @@ const chineseHoroscopeInfo = {
     Metal: { title: "Perro de Metal", text: ["El Perro de Metal evidencia sequedad en el trato y dureza en el gesto. Puede auto reprimirse y tiende a retraerse."] },
     Earth: { title: "Perro de Tierra", text: ["El Perro influenciado por la Tierra hace grandes esfuerzos por aceptarse a sí mismo y para ello busca reconocimiento y renombre afuera. Este nativo necesita del elemento Tierra para reflexionar sobre sus propias acciones y para buscar refugio en momentos de debilidad luego de tanto esfuerzo."] },
     Fire: { title: "Perro de Fuego", text: ["Este Perro posee una energía y fuerza transformadora. Se enfoca en avanzar y superar la apatía, con un fuerte impulso por cambiar la situación social."] },
-    Water: { title: "Perro de Agua", text: ["Este Perro intentará siempre evadirse de su inclinación a la angustia y al pesimismo y por ello tenderá a dramatizar casi todos los asuntos y proyectos que inicie."] },
+    Watter: { title: "Perro de Agua", text: ["Este Perro intentará siempre evadirse de su inclinación a la angustia y al pesimismo y por ello tenderá a dramatizar casi todos los asuntos y proyectos que inicie."] },
     Wood: { title: "Perro de Madera", text: ["Influido por la Madera, este Perro está signados por la coherencia y la seriedad. Busca calma y serenidad, eligiendo la tolerancia y la armonía sobre la intolerancia y el conflicto."] },
   },
   Pig: {
@@ -175,7 +175,7 @@ const chineseHoroscopeInfo = {
     Metal: { title: "Jabalí Metal", text: ["El Jabalí influenciado por el elemento Metal tiene un carácter más rígido e incrédulo que los demás. Se muestra más inflexible a la hora de negociar sobre algunas cuestiones, lo que le valdrá críticas, La influencia del Metal lo protege contra estos cuestionamientos y contra el oportunismo de otras personas."] },
     Earth: { title: "Jabalí Tierra", text: ["Este Jabalí está centrado en obtener beneficios de sus proyectos. Necesita ponerse objetivos posibles de cumplir y se interesa por lo material ante el temor de pasar necesidades."] },
     Fire: { title: "Jabalí Fuego", text: ["A este Jabalí le interesa la acción y rechazará la pasividad. Sus prioridades están vinculadas a la causas éticas, como la igualdad y la justicia."] },
-    Water: { title: "Jabalí Agua", text: ["El elemento Agua sobre el Jabalí lo lleva a mitigar su afán de lucro, por lo que tiende a rehuir a la ostentación y busca la tranquilidad en lo recóndito."] },
+    Watter: { title: "Jabalí Agua", text: ["El elemento Agua sobre el Jabalí lo lleva a mitigar su afán de lucro, por lo que tiende a rehuir a la ostentación y busca la tranquilidad en lo recóndito."] },
     Wood: { title: "Jabalí Madera", text: ["El Jabalí influenciado por el elemento Madera suele dominar sus pasiones y tener el predominio de la razón. Tiene un equilibrio anímico admirable y un sentido estético y artístico muy marcado, que lo lleva a buscar la belleza de las cosas."] },
   },
 };

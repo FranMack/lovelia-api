@@ -4,8 +4,10 @@ const userRoutes = require("./user.routes");
 const universalLoginRoutes = require("./universalLogin.routes");
 const mercadopagoRoutes = require("./mercadopago.routes");
 const paypalRoutes = require("./paypal.routes");
-const productRoutes = require("./product.routes");
+const soldProductRoutes = require("./soldProduct.routes");
 const alarmRoutes = require("./alarm.routes");
+const productRoutes=require("./product.routes")
+const chatRoutes=require("./chat.routes")
 const AutoCompleteControllers = require("../controllers/autocomplete.controllers");
 require("../config/auth.facebooks");
 const { validateAuth } = require("../midlewares/auth");
@@ -40,7 +42,9 @@ router.use("/user", userRoutes);
 router.use("/universalLogin", universalLoginRoutes);
 router.use("/payment-mercadopago", mercadopagoRoutes);
 router.use("/payment-paypal", paypalRoutes);
+router.use("/sold-product", soldProductRoutes);
 router.use("/product", productRoutes);
+router.use("/chat", chatRoutes);
 
 router.use("/alarm", alarmRoutes);
 

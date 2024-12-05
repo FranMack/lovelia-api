@@ -1,13 +1,13 @@
 const mongoose = require("mongoose");
 
 
-const ProductSchema = new mongoose.Schema({
+const soldProductSchema = new mongoose.Schema({
  
   model: {
     type: String,
     required: true,
   },
-  metal: {
+  material: {
     type: String,
     required: true,
   },
@@ -19,21 +19,34 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  intention: {
+    type: String,
+    required: true,
+  },
 
   price: {
     type: Number,
     required: true,
   },
-  stock: {
+  quantity: {
     type: Number,
     required: true,
   },
-  images: { type: [String], required: true }, 
+ 
+  delivery_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Delivery",
+  },
+ 
+  billing_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Billing",
+  },
 
 
 });
 
-ProductSchema.set("toJSON", {
+soldProductSchema.set("toJSON", {
   virtuals: true,
   versionKey: false,
   transform: function (doc, ret, options) {
@@ -41,6 +54,6 @@ ProductSchema.set("toJSON", {
   },
 });
 
-const Product = mongoose.model("Product", ProductSchema);
+const Sold_Product = mongoose.model("Sold_Product", soldProductSchema);
 
-module.exports = Product;
+module.exports = Sold_Product;

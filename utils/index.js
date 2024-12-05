@@ -8,4 +8,5 @@ const {sunHouseInfo}=require("./sunHouse.info");
 const {moonHouseInfo}=require("./moonHouse.info")
 const {ascendantInfo}=require("./ascendant.info")
 const {planetsAndAspectsInfo}=require("./planetsAndAspects.info")
-module.exports={kingMayaInfo,chineseHoroscopeInfo,tonesInfo,sunHouseInfo,moonHouseInfo,sunInfo,planetsAndAspectsInfo,ascendantInfo,moonInfo}
+const {numberInfo}=require("./number.info")
+module.exports={kingMayaInfo,chineseHoroscopeInfo,tonesInfo,sunHouseInfo,moonHouseInfo,sunInfo,planetsAndAspectsInfo,ascendantInfo,moonInfo,numberInfo}

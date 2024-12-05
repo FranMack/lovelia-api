@@ -1,7 +1,6 @@
 const { envs } = require("../config/env.config");
 const {
   User,
-  Product,
   TalismanDigital,
   TemporaryTransaction,
   Delivery,
@@ -11,17 +10,15 @@ const {
   MercadoPagoConfig,
   Preference,
   Payment,
-  PreApprovalPlan,
-  PreApproval,
-  CardToken,
+ 
 } = require("mercadopago");
-const ProductServices = require("../services/product.services");
+const SoldProductServices = require("../services/soldProduct.services");
 const { getDate, timeConverter } = require("../helpers/getDate");
 const {
   shopingDetailsEmail,
   sendTalismanDigitalActivation
 } = require("../helpers/mailer");
-const axios = require("axios");
+
 
 const client = new MercadoPagoConfig({
   accessToken: envs.MERCADO_PAGO_TOKEN,
@@ -152,7 +149,7 @@ class MercadopagoServices {
             const deliveryInfo = await Delivery.create(deliveryDetails);
 
             const productListDB = productDetails
-              ? await ProductServices.addProduct(
+              ? await SoldProductServices.addProduct(
                   productDetails,
                   deliveryInfo._id,
                   billingInfoDB._id

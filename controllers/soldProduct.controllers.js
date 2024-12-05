@@ -1,13 +1,13 @@
-const ProductServices= require("../services/product.services")
+const SoldProductServices= require("../services/soldProduct.services")
 
-class ProductControllers{
+class SoldProductControllers{
 
     static  addProduct=async(req,res)=>{
         
 
         try{
 
-            const products= await ProductServices.addProduct(req.body)
+            const products= await SoldProductServices.addProduct(req.body)
 
             res.status(200).json("Products added")
 
@@ -24,7 +24,7 @@ class ProductControllers{
         try{
             const {email}=req.params
 
-            const products= await ProductServices.productList(email)
+            const products= await SoldProductServices.productList(email)
             
             res.status(200).json(products)
 
@@ -39,4 +39,4 @@ class ProductControllers{
 }
 
 
-module.exports=ProductControllers
+module.exports=SoldProductControllers
