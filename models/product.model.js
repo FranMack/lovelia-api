@@ -13,11 +13,11 @@ const ProductSchema = new mongoose.Schema({
   },
   rock: {
     type: String,
-    required: true,
+
   },
   chain: {
     type: String,
-    required: true,
+
   },
 
   price: {

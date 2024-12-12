@@ -6,19 +6,10 @@ const {
   Delivery,
   Billing,
 } = require("../models/index.models");
-const {
-  MercadoPagoConfig,
-  Preference,
-  Payment,
- 
-} = require("mercadopago");
+const { MercadoPagoConfig, Preference, Payment } = require("mercadopago");
 const SoldProductServices = require("../services/soldProduct.services");
-const { getDate, timeConverter } = require("../helpers/getDate");
-const {
-  shopingDetailsEmail,
-  sendTalismanDigitalActivation
-} = require("../helpers/mailer");
-
+const { getDate } = require("../helpers/getDate");
+const { shopingDetailsEmail2 } = require("../helpers/mailer");
 
 const client = new MercadoPagoConfig({
   accessToken: envs.MERCADO_PAGO_TOKEN,
@@ -27,7 +18,7 @@ const client = new MercadoPagoConfig({
 class MercadopagoServices {
   static async createOrder(data) {
     const {
-      email,
+      buyerInfo,
       items,
       productDetails,
       deliveryDetails,
@@ -35,10 +26,7 @@ class MercadopagoServices {
       talismanDigitalOwners,
     } = data;
     try {
-      console.log("iteemssssssssssss", items);
-      console.log("productDetailsssssssssss", productDetails);
-
-      console.log("ownersssssssssssss", talismanDigitalOwners);
+      const { email, name, lastname } = buyerInfo;
 
       const temporaryInfoObject = {
         billingInfo: billingDetails,
@@ -49,7 +37,6 @@ class MercadopagoServices {
           return item;
         }
       });
-      console.log("iiiiiiiiiiiiiiiiii", talismanAnalogicDetails);
 
       if (talismanAnalogicDetails.length > 0) {
         temporaryInfoObject.deliveryInfo = deliveryDetails;
@@ -82,7 +69,7 @@ class MercadopagoServices {
             pending: `${envs.DOMAIN_URL}/api/v1/payment-mercadopago/pending`,
           },
           //se vence al par de dias/ dia, hay que generarlo con ngrok, hasta que tengamos el dominio
-          notification_url: `${envs.DOMAIN_URL}/api/v1/payment-mercadopago/webhook/?email_acount=${email}&temporary_info_id=${temporaryInfoId}`,
+          notification_url: `${envs.DOMAIN_URL}/api/v1/payment-mercadopago/webhook/?email_acount=${email}&name=${name}&lastname${lastname}&temporary_info_id=${temporaryInfoId}`,
         },
       });
 
@@ -104,6 +91,8 @@ class MercadopagoServices {
 
         const date = getDate();
         const email = paymentQuery.email_acount;
+        const name = paymentQuery.name;
+        const lastname = paymentQuery.lastname;
         const temporaryInfoId = paymentQuery.temporary_info_id;
         const payment_id = paymentData.id;
         const status = paymentData.status;
@@ -129,8 +118,6 @@ class MercadopagoServices {
             temporaryInfoId
           );
           const { billingInfo } = temporaryInfo;
-
-          console.log("TTTTTTTTTTTTTTTTTT", temporaryInfo);
 
           const productDetails = temporaryInfo?.itemsInfo;
           const deliveryDetails = temporaryInfo?.deliveryInfo;
@@ -161,7 +148,10 @@ class MercadopagoServices {
             const promises = temporaryInfo.talismanDigitalInfo.map(
               async (item) => {
                 // Crear un registro en TalismanDigital
-                await TalismanDigital.create({ email: item.email,billing_id:billingInfoDB._id });
+                await TalismanDigital.create({
+                  email: item.email,
+                  billing_id: billingInfoDB._id,
+                });
 
                 // Buscar el usuario y actualizar su estado de pago si existe
                 const user = await User.findOne({ email: item.email });
@@ -176,7 +166,15 @@ class MercadopagoServices {
             const result = await Promise.all(promises);
           }
           //enviar mail con detalle de compra
-          shopingDetailsEmail(email, productDetails, deliveryDetails, order_id);
+
+          shopingDetailsEmail2(
+            email,
+            productDetails,
+            deliveryDetails,
+            order_id,
+            name,
+            lastname
+          );
 
           return;
         } else {

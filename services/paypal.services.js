@@ -8,8 +8,11 @@ const {
 } = require("../models/index.models");
 const axios = require("axios");
 const SoldProductServices = require("../services/soldProduct.services");
-const { getDate, timeConverter } = require("../helpers/getDate");
-const { shopingDetailsEmail,sendTalismanDigitalActivation,shopingDetailsEmail2 } = require("../helpers/mailer");
+const { getDate } = require("../helpers/getDate");
+const {
+  sendTalismanDigitalActivation,
+  shopingDetailsEmail2,
+} = require("../helpers/mailer");
 
 class PaypalServices {
   static async createOrder(data) {
@@ -22,7 +25,7 @@ class PaypalServices {
       talismanDigitalOwners,
     } = data;
     try {
-      const{email,name,lastname}=buyerInfo
+      const { email, name, lastname } = buyerInfo;
 
       const temporaryInfoObject = {
         billingInfo: billingDetails,
@@ -33,7 +36,6 @@ class PaypalServices {
           return item;
         }
       });
-      console.log("iiiiiiiiiiiiiiiiii", talismanAnalogicDetails);
 
       if (talismanAnalogicDetails.length > 0) {
         temporaryInfoObject.deliveryInfo = deliveryDetails;
@@ -113,7 +115,13 @@ class PaypalServices {
     }
   }
 
-  static async captureOrder({ token, email,name,lastname,temporary_info_id }) {
+  static async captureOrder({
+    token,
+    email,
+    name,
+    lastname,
+    temporary_info_id,
+  }) {
     try {
       const params = new URLSearchParams();
       params.append("grant_type", "client_credentials");
@@ -162,8 +170,6 @@ class PaypalServices {
         );
         const { billingInfo } = temporaryInfo;
 
-        console.log("TTTTTTTTTTTTTTTTTT", temporaryInfo);
-
         const productDetails = temporaryInfo?.itemsInfo;
         const deliveryDetails = temporaryInfo?.deliveryInfo;
         const billingDetails = {
@@ -198,7 +204,7 @@ class PaypalServices {
                 billing_id: billingInfoDB._id,
               });
 
-              await sendTalismanDigitalActivation(item.email)
+              await sendTalismanDigitalActivation(item.email);
 
               // Buscar el usuario y actualizar su estado de pago si existe
               const user = await User.findOneAndUpdate(
@@ -214,8 +220,14 @@ class PaypalServices {
         }
         //enviar mail con detalle de compra
 
-     
-        shopingDetailsEmail2(email, productDetails, deliveryDetails, order_id,name,lastname);
+        shopingDetailsEmail2(
+          email,
+          productDetails,
+          deliveryDetails,
+          order_id,
+          name,
+          lastname
+        );
 
         return;
       } else {
