@@ -31,15 +31,11 @@ class PaypalServices {
         billingInfo: billingDetails,
       };
 
-      const talismanAnalogicDetails = productDetails.filter((item) => {
-        if (item.model !== "Digital") {
-          return item;
+      if (productDetails.length > 0) {
+        if (deliveryDetails) {
+          temporaryInfoObject.deliveryInfo = deliveryDetails;
         }
-      });
-
-      if (talismanAnalogicDetails.length > 0) {
-        temporaryInfoObject.deliveryInfo = deliveryDetails;
-        temporaryInfoObject.itemsInfo = talismanAnalogicDetails;
+        temporaryInfoObject.itemsInfo = productDetails;
       }
 
       if (talismanDigitalOwners) {
@@ -184,12 +180,14 @@ class PaypalServices {
         const billingInfoDB = await Billing.create(billingDetails);
 
         if (temporaryInfo.itemsInfo.length > 0) {
-          const deliveryInfo = await Delivery.create(deliveryDetails);
+          const deliveryInfo = deliveryDetails.address
+            ? await Delivery.create(deliveryDetails)
+            : undefined;
 
           const productListDB = productDetails
             ? await SoldProductServices.addProduct(
                 productDetails,
-                deliveryInfo._id,
+                deliveryInfo ? deliveryInfo._id : undefined,
                 billingInfoDB._id
               )
             : null;

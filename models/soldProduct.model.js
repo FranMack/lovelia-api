@@ -9,19 +9,19 @@ const soldProductSchema = new mongoose.Schema({
   },
   material: {
     type: String,
-    required: true,
+
   },
   rock: {
     type: String,
-    required: true,
+ 
   },
   chain: {
     type: String,
-    required: true,
+ 
   },
   intention: {
     type: String,
-    required: true,
+
   },
 
   price: {

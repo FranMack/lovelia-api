@@ -25,7 +25,7 @@ class ProductServices {
 
             const newListOfProducts=  await Product.insertMany(productList);
 
-            console.log("xxxxxxxxxxxxxxxxx",newListOfProducts)
+         
             return
         
         } 
