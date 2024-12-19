@@ -11,13 +11,9 @@ const {
   consultEmail,
 } = require("../helpers/mailer");
 const { filterPlacesInfo } = require("../helpers/filterPlacesInfo");
-const fs = require("fs");
 const path = require("path");
-const { soundTimeFormat } = require("../helpers/sound");
 const { envs } = require("../config/env.config");
 
-
-const { admin } = require("../config/firebase");
 const { Storage } = require("@google-cloud/storage");
 
 

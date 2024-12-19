@@ -18,7 +18,7 @@ const sendPushNotification = async (fcmToken, notification,data) => {
 
   // Use Firebase messaging API here to send the notification
 
- 
+ console.log("fmctoken===================>",fcmToken)
   await admin
     .messaging()
     .send({

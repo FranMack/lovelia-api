@@ -9,7 +9,7 @@ const {
 const { MercadoPagoConfig, Preference, Payment } = require("mercadopago");
 const SoldProductServices = require("../services/soldProduct.services");
 const { getDate } = require("../helpers/getDate");
-const { shopingDetailsEmail2 } = require("../helpers/mailer");
+const { shopingDetailsEmail2,sendTalismanDigitalActivation } = require("../helpers/mailer");
 
 const client = new MercadoPagoConfig({
   accessToken: envs.MERCADO_PAGO_TOKEN,
@@ -32,11 +32,8 @@ class MercadopagoServices {
         billingInfo: billingDetails,
       };
 
-
-
-    if (productDetails.length > 0) {
-        if(deliveryDetails){
-
+      if (productDetails.length > 0) {
+        if (deliveryDetails) {
           temporaryInfoObject.deliveryInfo = deliveryDetails;
         }
         temporaryInfoObject.itemsInfo = productDetails;
@@ -51,7 +48,7 @@ class MercadopagoServices {
       );
       const temporaryInfoId = temporaryInfo.id;
 
-      const successUrl = envs.FRONT_URL;
+      const successUrl = `${envs.FRONT_URL}/thanks-for-buying`;
 
       const preference = new Preference(client);
 
@@ -135,7 +132,7 @@ class MercadopagoServices {
             const deliveryInfo = deliveryDetails.address
               ? await Delivery.create(deliveryDetails)
               : undefined;
-  
+
             const productListDB = productDetails
               ? await SoldProductServices.addProduct(
                   productDetails,
@@ -153,6 +150,8 @@ class MercadopagoServices {
                   email: item.email,
                   billing_id: billingInfoDB._id,
                 });
+
+                await sendTalismanDigitalActivation(item.email);
 
                 // Buscar el usuario y actualizar su estado de pago si existe
                 const user = await User.findOne({ email: item.email });
