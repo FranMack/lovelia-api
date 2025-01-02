@@ -173,10 +173,8 @@ function MailTemplate1(name = "", title, content, link, buttonText) {
       `;
 }
 
-function MailTemplate2(products, deliveryInfo, orderId,name,lastname) {
- 
-
-    return (`
+function MailTemplate2(products, deliveryInfo, orderId, name, lastname) {
+  return `
   <!DOCTYPE html>
   <html>
   <head>
@@ -410,9 +408,7 @@ function MailTemplate2(products, deliveryInfo, orderId,name,lastname) {
   </body>
   </html>
   
-        `);
-  }
-  
-  module.exports = { MailTemplate1, MailTemplate2 };
+        `;
+}
 
-
+module.exports = { MailTemplate1, MailTemplate2 };

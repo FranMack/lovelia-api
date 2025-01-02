@@ -1,7 +1,7 @@
 const { envs } = require("../config/env.config");
 const transporter = require("../config/mailerTransporter");
 
-const { MailTemplate1,MailTemplate2 } = require("../assets/mailTemplates");
+const { MailTemplate1, MailTemplate2 } = require("../assets/mailTemplates");
 
 async function sendRegistrationEmail(destinatario, nombreUsuario, token) {
   const link = `${envs.DOMAIN_URL}/api/v1/user/confirmAcount/${token}`;
@@ -186,15 +186,15 @@ async function sendSubscriptionEmail(destinatario, nombreUsuario) {
 }
 
 async function sendTalismanDigitalActivation(destinatario) {
-  const link = `${envs.FRONT_URL}/login`;
+  const link = `${envs.FRONT_URL}/checkout/digital`;
   const title =
     " Tu talismán digital está alineado y listo para desplegar toda su energía";
   const content =
     "Si ya formas parte del universo de Lovelia, solo necesitas iniciar sesión y dirigirte a la sección de tu perfil para activar este poderoso símbolo de protección y guía.\n \n Si aún no has creado tu cuenta, el cosmos te invita a dar el primer paso y registrarte. El destino te espera, ¡es momento de activar la magia que te pertenece! 🌙🔮";
-  
-    const buttonText = "Activar mi talismán";
 
-    const nombreUsuario=""
+  const buttonText = "Activar mi talismán";
+
+  const nombreUsuario = "";
 
   const html = MailTemplate1(nombreUsuario, title, content, link, buttonText);
 
@@ -213,8 +213,6 @@ async function sendTalismanDigitalActivation(destinatario) {
   }
 }
 
-
-
 async function shopingDetailsEmail2(
   destinatario,
   products,
@@ -223,22 +221,35 @@ async function shopingDetailsEmail2(
   name,
   lastname
 ) {
-
-  const productList = products.map((item) => {
-    if (!item.model || !item.material || !item.rock || !item.chain || !item.intention) {
-      // Evita agregar una fila si algún campo necesario está vacío
-      return '';
-    }
-    return ` <tr>
+  const productList = products
+    .map((item) => {
+      if (
+        !item.model ||
+        !item.material ||
+        !item.rock ||
+        !item.chain ||
+        !item.intention
+      ) {
+        // Evita agregar una fila si algún campo necesario está vacío
+        return "";
+      }
+      return ` <tr>
                 <th>${item.model}</th>
                 <th>${item.material}</th>
                 <th>${item.rock}</th>
                 <th>${item.chain}</th>
                 <th>${item.intention}</th>
               </tr>`;
-  }).join('')
+    })
+    .join("");
 
-  const html = MailTemplate2(productList, deliveryInfo, orderId,name,lastname)
+  const html = MailTemplate2(
+    productList,
+    deliveryInfo,
+    orderId,
+    name,
+    lastname
+  );
 
   const mailOptions = {
     from: `Lovelia <${envs.USER_MAILER}>`,
@@ -255,13 +266,6 @@ async function shopingDetailsEmail2(
   }
 }
 
-
-
-
-
-
-
-
 module.exports = {
   sendRegistrationEmail,
   forgetPasswordEmail,
@@ -269,5 +273,5 @@ module.exports = {
   shopingDetailsEmail,
   sendSubscriptionEmail,
   sendTalismanDigitalActivation,
-  shopingDetailsEmail2
+  shopingDetailsEmail2,
 };
