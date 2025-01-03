@@ -392,7 +392,7 @@ class UserServices {
         kinMaya: transformSolarSail(solarSail),
         tones: cosmicTone,
         phrase: intention ? intention : "Activa tu talísman",
-        reloadSceneryDelay: 3600,
+        reloadSceneryDelay: 60,
       };
 
       // Convertir el objeto a formato JSON
