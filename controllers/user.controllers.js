@@ -75,15 +75,12 @@ class UserControllers {
       };
 
       const token = generateToken(payload);
-      // res.cookie("token", token, {
-      //   sameSite: "none",
-      //   secure: true,
-      // });
 
       res.cookie("token", token, {
         sameSite: "Lax", // Permite el envío de cookies en solicitudes de terceros
         secure: true, // Asegura que la cookie solo se envíe a través de HTTPS
         httpOnly: true, // Previene el acceso a la cookie desde JavaScript del lado del cliente
+        domain: ".lovelia.me", // Explicitly set the domain for both frontend and API
       });
 
       res.status(200).json({
