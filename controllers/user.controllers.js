@@ -76,10 +76,15 @@ class UserControllers {
 
       const token = generateToken(payload);
 
-      res.cookie("token", token, {
-        sameSite: "None", // Permite el envío de cookies en solicitudes de terceros
-        secure: true, // Asegura que la cookie solo se envíe a través de HTTPS
-      });
+      // Set the cookie and log error if it fails
+      try {
+        res.cookie("token", token, {
+          sameSite: "None", // Permite el envío de cookies en solicitudes de terceros
+          secure: true, // Asegura que la cookie solo se envíe a través de HTTPS
+        });
+      } catch (error) {
+        console.log("Error when trying to save cookies", error);
+      }
 
       res.status(200).json({
         ...payload,
