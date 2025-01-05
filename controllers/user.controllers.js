@@ -76,13 +76,30 @@ class UserControllers {
 
       const token = generateToken(payload);
 
-      res.cookie("token", token, {
-        sameSite: "Lax", // Permite el envío de cookies en solicitudes de terceros
-        secure: true, // Asegura que la cookie solo se envíe a través de HTTPS
-        httpOnly: true, // Previene el acceso a la cookie desde JavaScript del lado del cliente
-        domain: ".lovelia.me", // Explicitly set the domain for both frontend and API
-        path: "/", // Ensure cookie is available for all routes
-      });
+      try {
+        res.cookie("token", token, {
+          sameSite: "Lax", // Permite el envío de cookies en solicitudes de terceros
+          secure: true, // Asegura que la cookie solo se envíe a través de HTTPS
+          httpOnly: true, // Previene el acceso a la cookie desde JavaScript del lado del cliente
+          domain: ".lovelia.me", // Explicitly set the domain for both frontend and API
+          path: "/", // Ensure cookie is available for all routes
+        });
+
+        console.log("Cookie set successfully:", {
+          token,
+          options: {
+            sameSite: "Lax",
+            secure: true,
+            httpOnly: true,
+            domain: ".lovelia.me",
+            path: "/",
+          },
+        });
+      } catch (error) {
+        console.error("Error setting cookie:", error);
+        // Optionally return an error response
+        //res.status(500).json({ message: "Failed to set cookie", error: error.message });
+      }
 
       res.status(200).json({
         ...payload,
