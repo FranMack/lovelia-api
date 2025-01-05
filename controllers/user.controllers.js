@@ -79,8 +79,13 @@ class UserControllers {
       // Set the cookie and log error if it fails
       try {
         res.cookie("token", token, {
-          sameSite: "None", // Permite el envío de cookies en solicitudes de terceros
-          secure: true, // Asegura que la cookie solo se envíe a través de HTTPS
+          //sameSite: "None", // Permite el envío de cookies en solicitudes de terceros
+          //secure: true, // Asegura que la cookie solo se envíe a través de HTTPS
+          httpOnly: true, // Prevent JavaScript access to the cookie
+          secure: true, // Only send the cookie over HTTPS
+          sameSite: "Lax", // Treat the cookie as first-party for navigation requests
+          domain: ".lovelia.me", // Share the cookie across subdomains
+          path: "/", // Allow the cookie on all routes
         });
       } catch (error) {
         console.log("Error when trying to save cookies", error);
