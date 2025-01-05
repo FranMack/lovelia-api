@@ -79,9 +79,6 @@ class UserControllers {
       res.cookie("token", token, {
         sameSite: "None", // Permite el envío de cookies en solicitudes de terceros
         secure: true, // Asegura que la cookie solo se envíe a través de HTTPS
-        httpOnly: true, // Previene el acceso a la cookie desde JavaScript del lado del cliente
-        domain: ".lovelia.me", // Explicitly set the domain for both frontend and API
-        path: "/", // Ensure cookie is available for all routes
       });
 
       res.status(200).json({
