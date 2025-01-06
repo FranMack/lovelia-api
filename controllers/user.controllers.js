@@ -80,6 +80,8 @@ class UserControllers {
         sameSite: "none",
         secure: true,
         maxAge: 24 * 60 * 60 * 1000,
+        //domain: ".lovelia.me", // Explicitly set the domain for both frontend and API
+        path: "/", // Ensure cookie is available for all routes
       });
 
       res.status(200).json({
