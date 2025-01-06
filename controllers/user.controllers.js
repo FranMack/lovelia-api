@@ -75,6 +75,7 @@ class UserControllers {
       };
 
       const token = generateToken(payload);
+
       res.cookie("token", token, {
         sameSite: "none",
         secure: true,
