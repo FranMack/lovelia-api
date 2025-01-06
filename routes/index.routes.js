@@ -8,6 +8,7 @@ const soldProductRoutes = require("./soldProduct.routes");
 const alarmRoutes = require("./alarm.routes");
 const productRoutes=require("./product.routes")
 const chatRoutes=require("./chat.routes")
+const shoppingCartRouter=require("./shoppingCart.routes")
 const AutoCompleteControllers = require("../controllers/autocomplete.controllers");
 require("../config/auth.facebooks");
 const { validateAuth } = require("../midlewares/auth");
@@ -47,5 +48,6 @@ router.use("/product", productRoutes);
 router.use("/chat", chatRoutes);
 
 router.use("/alarm", alarmRoutes);
+router.use("/shopping-cart", shoppingCartRouter);
 
 module.exports = router;

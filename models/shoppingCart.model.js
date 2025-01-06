@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const ProductSchema = new mongoose.Schema({
+const ShoppingCartSchema = new mongoose.Schema({
   model: {
     type: String,
     required: true,
@@ -16,18 +16,21 @@ const ProductSchema = new mongoose.Schema({
     type: String,
   },
 
-  price: {
+  quantity: {
     type: Number,
     required: true,
   },
-  stock: {
-    type: Number,
-    required: true,
+  intention: {
+    type: String,
   },
-  images: { type: [String], required: true },
+
+   user_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
 });
 
-ProductSchema.set("toJSON", {
+ShoppingCartSchema.set("toJSON", {
   virtuals: true,
   versionKey: false,
   transform: function (doc, ret, options) {
@@ -35,6 +38,6 @@ ProductSchema.set("toJSON", {
   },
 });
 
-const Product = mongoose.model("Product", ProductSchema);
+const ShoppingCart = mongoose.model("ShoppingCart", ShoppingCartSchema);
 
-module.exports = Product;
+module.exports = ShoppingCart;

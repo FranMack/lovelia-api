@@ -1,26 +1,49 @@
-const { validateToken } = require("../config/token");
+const { validateToken, generateToken } = require("../config/token");
 
 function validateAuth(req, res, next) {
   const token = req.cookies.token;
 
-
   if (!token) {
     return res.status(401).json({
-      "error": "Unauthorized"
-    })
+      error: "Unauthorized",
+    });
   }
 
+  // Validar el token
   const user = validateToken(token);
 
   if (!user) {
     return res.status(401).json({
-      "error": "Unauthorized"
-    })
+      error: "Unauthorized",
+    });
   }
 
+  // Agregar usuario al request
   req.user = user;
+
+  // Verificar si el token está próximo a expirar (por ejemplo, menos de 5 minutos)
+  const currentTime = Math.floor(Date.now() / 1000); // Tiempo actual en segundos
+  const timeLeft = user.exp - currentTime; // Tiempo restante hasta la expiración
+
+  if (timeLeft < 60 * 60) {
+    // Si el token está próximo a expirar, generamos uno nuevo
+    const newToken = generateToken({
+      email: user.email,
+      id: user.id,
+      name: user.name,
+      lastname: user.lastname,
+    });
+
+    // Actualizamos la cookie con el nuevo token
+    res.cookie("token", newToken, {
+      sameSite: "none",
+      secure: true,
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000, // 24 horas
+    });
+  }
 
   next();
 }
 
-module.exports = {validateAuth};
+module.exports = { validateAuth };

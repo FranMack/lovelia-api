@@ -16,7 +16,6 @@ const { envs } = require("../config/env.config");
 
 const { Storage } = require("@google-cloud/storage");
 
-
 class UserControllers {
   static async register(req, res) {
     const data = req.body;
@@ -36,21 +35,18 @@ class UserControllers {
         id: newUser._id,
       };
 
-      if(!newUser.confirm){
+      if (!newUser.confirm) {
         const token = generateTokenConfirmAcount(payload);
 
         await sendRegistrationEmail(newUser.email, newUser.name, token);
-  
-       return  res.status(200).json({
+
+        return res.status(200).json({
           message:
             "Your account has been created successfully, you will then receive an email that will allow you to confirm your account",
         });
-
       }
 
-      res.status(200).json({acountCreated:"ok",acountConfirmed:true})
-
-     
+      res.status(200).json({ acountCreated: "ok", acountConfirmed: true });
     } catch (error) {
       console.log(error);
       if (error.response) {
@@ -71,8 +67,6 @@ class UserControllers {
       }
       const user = await UserServices.login(data);
 
-     
-
       const payload = {
         email: user.email,
         name: user.name,
@@ -84,6 +78,7 @@ class UserControllers {
       res.cookie("token", token, {
         sameSite: "none",
         secure: true,
+        maxAge: 24 * 60 * 60 * 1000,
       });
 
       res.status(200).json({
@@ -91,7 +86,7 @@ class UserControllers {
         token,
         lastname: user.lastname,
         subscription: user.payment,
-        talismanActivated:user.talismanActivated
+        talismanActivated: user.talismanActivated,
       });
     } catch (error) {
       console.log(error);
@@ -264,7 +259,6 @@ class UserControllers {
     }
   }
 
-
   static async meditations(req, res) {
     const storage = new Storage({
       projectId: "leafy-bond-427721-f6", // Reemplaza con tu Project ID
@@ -274,7 +268,6 @@ class UserControllers {
     const bucketName = "threejs-api"; // Nombre del bucket
 
     try {
-
       // Filtrar archivos solo en la "carpeta" meditations
       const [files] = await storage.bucket(bucketName).getFiles({
         prefix: "public/meditations/", // Ruta a la carpeta en el bucket
@@ -287,7 +280,6 @@ class UserControllers {
       }));
 
       res.json(audioFiles);
-
     } catch (error) {
       console.error("Error al obtener las meditaciones:", error);
       res.status(500).send("Error al obtener las meditaciones.");
@@ -335,53 +327,50 @@ class UserControllers {
     }
   }
 
-  static async sessionFmcToken(req,res){
-try{
-  const{fcmToken}=req.params
-  const{email}=req.user;
+  static async sessionFmcToken(req, res) {
+    try {
+      const { fcmToken } = req.params;
+      const { email } = req.user;
 
-  const saveToken=await UserServices.sessionFmcToken(email,fcmToken);
+      const saveToken = await UserServices.sessionFmcToken(email, fcmToken);
 
-  res.send(req.user);
-}
-catch (error) {
-  if (error.response) {
-    res.status(error.response.status).json({ error: error.message });
-  } else {
-    res.status(400).json({ error: error.message });
-  }
-}
-  }
-
-  static async activateTalisman(req,res){
-    const authToken = req.cookies.token;
-    try{
-      const activation =await UserServices.activateTalisman(req.body,authToken)
-
-      res.status(200).json("Digital talisman activated")
-    }
-    catch (error) {
-      console.log(error)
+      res.send(req.user);
+    } catch (error) {
       if (error.response) {
         res.status(error.response.status).json({ error: error.message });
       } else {
         res.status(400).json({ error: error.message });
       }
     }
-
   }
 
-  static async checkTalismanAcounts(req,res){
-    const {talismanAcounts}=req.body;
-    try{
+  static async activateTalisman(req, res) {
+    const authToken = req.cookies.token;
+    try {
+      const activation = await UserServices.activateTalisman(
+        req.body,
+        authToken
+      );
 
-      const acounts= await UserServices.checkTalismanAcounts(talismanAcounts)
-
-      res.status(200).json(acounts)
-
+      res.status(200).json("Digital talisman activated");
+    } catch (error) {
+      console.log(error);
+      if (error.response) {
+        res.status(error.response.status).json({ error: error.message });
+      } else {
+        res.status(400).json({ error: error.message });
+      }
     }
-    catch (error) {
-      console.log(error)
+  }
+
+  static async checkTalismanAcounts(req, res) {
+    const { talismanAcounts } = req.body;
+    try {
+      const acounts = await UserServices.checkTalismanAcounts(talismanAcounts);
+
+      res.status(200).json(acounts);
+    } catch (error) {
+      console.log(error);
       if (error.response) {
         res.status(error.response.status).json({ error: error.message });
       } else {

@@ -17,6 +17,7 @@ function validateToken(token) {
     email: payload.email,
     name:payload.name,
     lastname:payload.lastname,
+    exp:payload.exp
   };
   return user;
 }

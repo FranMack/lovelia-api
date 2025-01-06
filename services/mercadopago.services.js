@@ -9,7 +9,10 @@ const {
 const { MercadoPagoConfig, Preference, Payment } = require("mercadopago");
 const SoldProductServices = require("../services/soldProduct.services");
 const { getDate } = require("../helpers/getDate");
-const { shopingDetailsEmail2,sendTalismanDigitalActivation } = require("../helpers/mailer");
+const {
+  shopingDetailsEmail2,
+  sendTalismanDigitalActivation,
+} = require("../helpers/mailer");
 
 const client = new MercadoPagoConfig({
   accessToken: envs.MERCADO_PAGO_TOKEN,
@@ -24,6 +27,7 @@ class MercadopagoServices {
       deliveryDetails,
       billingDetails,
       talismanDigitalOwners,
+      user_id,
     } = data;
     try {
       const { email, name, lastname } = buyerInfo;
@@ -65,7 +69,7 @@ class MercadopagoServices {
             pending: `${envs.DOMAIN_URL}/api/v1/payment-mercadopago/pending`,
           },
           //se vence al par de dias/ dia, hay que generarlo con ngrok, hasta que tengamos el dominio
-          notification_url: `${envs.DOMAIN_URL}/api/v1/payment-mercadopago/webhook/?email_acount=${email}&name=${name}&lastname${lastname}&temporary_info_id=${temporaryInfoId}`,
+          notification_url: `${envs.DOMAIN_URL}/api/v1/payment-mercadopago/webhook/?email_acount=${email}&name=${name}&lastname${lastname}&temporary_info_id=${temporaryInfoId}&user_id=${user_id}`,
         },
       });
 
@@ -92,6 +96,7 @@ class MercadopagoServices {
         const temporaryInfoId = paymentQuery.temporary_info_id;
         const payment_id = paymentData.id;
         const status = paymentData.status;
+        const user_id = paymentQuery.user_id;
 
         //VER COMO GENERAR NUMERO DE ORDEN
         const order_id = Math.round(Math.random() * 100000);
@@ -175,6 +180,11 @@ class MercadopagoServices {
             name,
             lastname
           );
+
+          //usuario logueado ===> borrar su carrito de la db luego de la compra
+          if (user_id) {
+            await ShoppingCartServices.cleanShopingCart(user_id);
+          }
 
           return;
         } else {
