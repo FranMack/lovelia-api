@@ -4,7 +4,6 @@ const UserServices = require("../services/user.services");
 const {
   generateToken,
   generateTokenConfirmAcount,
-  validateTokenConfirmAcoubt,
 } = require("../config/token");
 const {
   sendRegistrationEmail,
@@ -177,10 +176,7 @@ class UserControllers {
   }
 
   static async logout(req, res) {
-    res.clearCookie("token", {
-      sameSite: "none",
-      secure: true,
-    });
+    res.clearCookie("token", cookiesSettings);
 
     res.status(200).json({ message: "You have logged out" });
   }
