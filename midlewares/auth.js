@@ -1,4 +1,5 @@
 const { validateToken, generateToken } = require("../config/token");
+const { cookiesSettings } = require("../config/cookies.settings");
 
 function validateAuth(req, res, next) {
   const token = req.cookies.token;
@@ -35,12 +36,7 @@ function validateAuth(req, res, next) {
     });
 
     // Actualizamos la cookie con el nuevo token
-    res.cookie("token", newToken, {
-      sameSite: "none",
-      secure: true,
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000, // 24 horas
-    });
+    res.cookie("token", newToken, cookiesSettings);
   }
 
   next();

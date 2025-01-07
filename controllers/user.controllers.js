@@ -1,4 +1,5 @@
 const { validationResult } = require("express-validator");
+const { cookiesSettings } = require("../config/cookies.settings");
 const UserServices = require("../services/user.services");
 const {
   generateToken,
@@ -76,13 +77,12 @@ class UserControllers {
 
       const token = generateToken(payload);
 
-      res.cookie("token", token, {
-        sameSite: "none",
-        secure: true,
-        maxAge: 24 * 60 * 60 * 1000,
-        //domain: ".lovelia.me", // Explicitly set the domain for both frontend and API
-        path: "/", // Ensure cookie is available for all routes
-      });
+      // Set the cookie and log error if it fails
+      try {
+        res.cookie("token", token, cookiesSettings);
+      } catch (error) {
+        console.log("Error when trying to save cookies", error);
+      }
 
       res.status(200).json({
         ...payload,
