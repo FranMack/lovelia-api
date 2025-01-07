@@ -1,5 +1,5 @@
 const { validationResult } = require("express-validator");
-const { cookiesSettings } = require("../config/cookies");
+const { cookiesSettings } = require("../config/cookies.settings");
 const UserServices = require("../services/user.services");
 const {
   generateToken,
