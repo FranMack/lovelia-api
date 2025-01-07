@@ -79,10 +79,12 @@ class UserControllers {
       // Set the cookie and log error if it fails
       try {
         res.cookie("token", token, {
-          sameSite: "None", // Permite el envío de cookies en solicitudes de terceros
-          //sameSite: "Lax", // Treat the cookie as first-party for navigation requests
+          //sameSite: "None", // Permite el envío de cookies en solicitudes de terceros
           secure: true, // Only send the cookie over HTTPS
-          httpOnly: true, // Prevent JavaScript access to the cookie
+
+          // Test mode
+          sameSite: "Lax", // Treat the cookie as first-party for navigation requests
+          //httpOnly: true, // Prevent JavaScript access to the cookie
           domain: ".lovelia.me", // Share the cookie across subdomains
           path: "/", // Allow the cookie on all routes
         });
