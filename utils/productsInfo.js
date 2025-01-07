@@ -297,7 +297,16 @@ const pulsera_plata_1 = "https://storage.googleapis.com/threejs-api/public/Reenc
 const pulsera_plata_2 = "https://storage.googleapis.com/threejs-api/public/Reencuadre/Pulsera/Pulsera%20Plata%207.webp";
 
 
+const digital_1="https://storage.googleapis.com/threejs-api/public/Reencuadre/digital/ejemplo1_talisman_digital.webp"
+const digital_2="https://storage.googleapis.com/threejs-api/public/Reencuadre/digital/ejemplo2_talisman_digital.webp"
+const digital_3="https://storage.googleapis.com/threejs-api/public/Reencuadre/digital/ejemplo3_talisman_digital.webp"
+const digital_4="https://storage.googleapis.com/threejs-api/public/Reencuadre/digital/ejemplo4_talisman_digital.webp"
+
+
+
 const productList = [
+
+ 
   {
     model: "Aura",
     metal: "Aleación bañada en oro",
@@ -982,6 +991,15 @@ const productList = [
     price: 1,
     stock: 10,
     images: [pulsera_plata_1, pulsera_plata_2],
+  },
+  {
+    model: "Digital",
+    metal: "Digital",
+    chain: "Digital",
+    rock: "Digital",
+    price: 2,
+    stock: Infinity,
+    images: [digital_1, digital_2, digital_3,digital_4],
   },
 ];
 
