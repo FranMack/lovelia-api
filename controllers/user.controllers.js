@@ -1,4 +1,5 @@
 const { validationResult } = require("express-validator");
+const { cookiesSettings } = require("../config/cookies");
 const UserServices = require("../services/user.services");
 const {
   generateToken,
@@ -78,13 +79,7 @@ class UserControllers {
 
       // Set the cookie and log error if it fails
       try {
-        res.cookie("token", token, {
-          secure: true, // Only send the cookie over HTTPS
-          maxAge: 24 * 60 * 60 * 1000, // 24 hours
-          sameSite: "Lax", // Treat the cookie as first-party for navigation requests
-          domain: ".lovelia.me", // Share the cookie across subdomains
-          path: "/", // Allow the cookie on all routes
-        });
+        res.cookie("token", token, cookiesSettings);
       } catch (error) {
         console.log("Error when trying to save cookies", error);
       }
