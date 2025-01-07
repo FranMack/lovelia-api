@@ -176,7 +176,12 @@ class UserControllers {
   }
 
   static async logout(req, res) {
-    res.clearCookie("token", cookiesSettings);
+    res.clearCookie("token", {
+      secure: true, // Only send the cookie over HTTPS
+      sameSite: "Lax", // Treat the cookie as first-party for navigation requests
+      domain: ".lovelia.me", // Share the cookie across subdomains
+      path: "/", // Allow the cookie on all routes
+    });
 
     res.status(200).json({ message: "You have logged out" });
   }
