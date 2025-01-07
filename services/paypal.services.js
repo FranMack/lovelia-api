@@ -5,6 +5,7 @@ const {
   TemporaryTransaction,
   Delivery,
   Billing,
+  ShoppingCart,
 } = require("../models/index.models");
 const axios = require("axios");
 const SoldProductServices = require("../services/soldProduct.services");
@@ -13,6 +14,7 @@ const {
   sendTalismanDigitalActivation,
   shopingDetailsEmail2,
 } = require("../helpers/mailer");
+const ShoppingCartServices = require("./shoppingCart.services");
 
 class PaypalServices {
   static async createOrder(data) {
@@ -23,6 +25,7 @@ class PaypalServices {
       deliveryDetails,
       billingDetails,
       talismanDigitalOwners,
+      user_id
     } = data;
     try {
       const { email, name, lastname } = buyerInfo;
@@ -71,7 +74,7 @@ class PaypalServices {
               locale: "en-US",
               landing_page: "NO_PREFERENCE",
               user_action: "PAY_NOW",
-              return_url: `${envs.DOMAIN_URL}/api/v1/payment-paypal/capture-order?email=${email}&name=${name}&lastname=${lastname}&temporary_info_id=${temporaryInfoId}`,
+              return_url: `${envs.DOMAIN_URL}/api/v1/payment-paypal/capture-order?email=${email}&name=${name}&lastname=${lastname}&temporary_info_id=${temporaryInfoId}&user_id=${user_id}`,
               cancel_url: `${envs.DOMAIN_URL}/api/v1/payment-paypal/cancel-order`,
             },
           },
@@ -117,6 +120,7 @@ class PaypalServices {
     name,
     lastname,
     temporary_info_id,
+    user_id
   }) {
     try {
       const params = new URLSearchParams();
@@ -226,6 +230,14 @@ class PaypalServices {
           name,
           lastname
         );
+
+        //usuario logueado ===> borrar su carrito de la db luego de la compra
+        if(user_id){
+
+          await ShoppingCartServices.cleanShopingCart(user_id)
+
+        }
+
 
         return;
       } else {

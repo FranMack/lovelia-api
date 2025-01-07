@@ -81,6 +81,7 @@ class UserControllers {
         res.cookie("token", token, {
           //sameSite: "None", // Permite el envío de cookies en solicitudes de terceros
           secure: true, // Only send the cookie over HTTPS
+          maxAge: 24 * 60 * 60 * 1000, // 24 hours
 
           // Test mode
           sameSite: "Lax", // Treat the cookie as first-party for navigation requests

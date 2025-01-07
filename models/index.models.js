@@ -8,6 +8,7 @@ const Alarm = require("./alarm.model");
 const TalismanDigital=require("./talismanDigital.model")
 const Product =require("./product.model")
 const Chat=require("./chat.model")
+const ShoppingCart=require("./shoppingCart.model")
 
 module.exports = {
   User,
@@ -19,5 +20,6 @@ module.exports = {
   TemporaryTransaction,
   Alarm,
   Product,
-  Chat
+  Chat,
+  ShoppingCart
 };
