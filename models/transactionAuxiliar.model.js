@@ -53,7 +53,7 @@ const temporaryTransactionSchema = new mongoose.Schema({
             type: String,
   
           },
-          material: {
+          metal: {
             type: String,
    
           },

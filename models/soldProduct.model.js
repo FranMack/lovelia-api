@@ -1,27 +1,21 @@
 const mongoose = require("mongoose");
 
-
 const soldProductSchema = new mongoose.Schema({
- 
   model: {
     type: String,
     required: true,
   },
-  material: {
+  metal: {
     type: String,
-
   },
   rock: {
     type: String,
- 
   },
   chain: {
     type: String,
- 
   },
   intention: {
     type: String,
-
   },
 
   price: {
@@ -32,18 +26,16 @@ const soldProductSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
- 
+
   delivery_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Delivery",
   },
- 
+
   billing_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Billing",
   },
-
-
 });
 
 soldProductSchema.set("toJSON", {

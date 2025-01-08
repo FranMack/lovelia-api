@@ -3,7 +3,7 @@ const {
   Sold_Product,
   Delivery,
   Billing,
-  TalismanDigital
+  TalismanDigital,
 } = require("../models/index.models");
 
 class SoldProductServices {
@@ -18,13 +18,13 @@ class SoldProductServices {
         // Extraer los valores del documento y convertir a objeto plano
         const productData = {
           model: item.model,
-          material: item.material,
+          metal: item.metal,
           rock: item.rock,
           chain: item.chain,
           intention: item.intention,
           price: item.price,
           quantity: item.quantity,
-          delivery_id: delivery_id ? delivery_id:null,
+          delivery_id: delivery_id ? delivery_id : null,
           billing_id: billing_id ? billing_id : null,
         };
 
@@ -66,8 +66,6 @@ class SoldProductServices {
         return item._id;
       });
 
-      console.log("yyyyyyyyyyyyyy",billings_id)
-
       const promises0 = billings_id.map((id) => Billing.findById(id));
       const billingInfo = await Promise.all(promises0);
       const billingResumeInfo = billingInfo.map((item) => {
@@ -83,41 +81,44 @@ class SoldProductServices {
 
       const products = await Promise.all(promises1);
 
-  
-
       // Crear las promesas para cada producto
-      console.log("xxxxxxxxx",products)
       const deliveryId = products.map((item) => item[0].delivery_id);
+
+      console.log("xxxx,deliveryId",deliveryId)
 
       const promises = deliveryId.map((id) => Delivery.findById(id));
 
       // Ejecutar todas las promesas en paralelo
       const deliveryInfo = await Promise.all(promises);
+      console.log("xxxx,deliveryInfo",deliveryInfo)
 
       // Combinar la información
       const combinedArray = products.map((product) => {
         const delivery = deliveryInfo.find(
           (del) =>
-            del && del._id.toString() === product[0].delivery_id.toString()
+            del && del._id?.toString() === product[0]?.delivery_id?.toString()
         );
+      
         const billing = billingResumeInfo.find(
           (bill) =>
-            bill && bill.id.toString() === product[0].billing_id.toString()
+            bill && bill.id?.toString() === product[0]?.billing_id?.toString()
         );
+      
         return {
           products: product, // convertir a objeto plano si es necesario
-          deliveryDetails: delivery ? delivery.toObject() : null,
-          billingDetails: billing ? billing : null,
+          deliveryDetails: delivery ? (typeof delivery.toObject === 'function' ? delivery.toObject() : delivery) : null,
+          billingDetails: billing || null,
         };
       });
+      
 
-      const hasTalismanDigital= await TalismanDigital.findOne({ email })
+      const hasTalismanDigital = await TalismanDigital.findOne({ email });
 
-      const talismanDigitalStatus= !hasTalismanDigital ? {subscription:false,activated:false}:{subscription:true,activated:hasTalismanDigital.activated}
+      const talismanDigitalStatus = !hasTalismanDigital
+        ? { subscription: false, activated: false }
+        : { subscription: true, activated: hasTalismanDigital.activated };
 
-
-
-      return {combinedArray,talismanDigitalStatus}; // Agrupar el array combinado
+      return { combinedArray, talismanDigitalStatus }; // Agrupar el array combinado
     } catch (error) {
       throw error;
     }

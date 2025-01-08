@@ -225,7 +225,7 @@ async function shopingDetailsEmail2(
     .map((item) => {
       if (
         !item.model ||
-        !item.material ||
+        !item.metal ||
         !item.rock ||
         !item.chain ||
         !item.intention
@@ -235,7 +235,7 @@ async function shopingDetailsEmail2(
       }
       return ` <tr>
                 <th>${item.model}</th>
-                <th>${item.material}</th>
+                <th>${item.metal}</th>
                 <th>${item.rock}</th>
                 <th>${item.chain}</th>
                 <th>${item.intention}</th>

@@ -25,7 +25,7 @@ class PaypalServices {
       deliveryDetails,
       billingDetails,
       talismanDigitalOwners,
-      user_id
+      user_id,
     } = data;
     try {
       const { email, name, lastname } = buyerInfo;
@@ -120,7 +120,7 @@ class PaypalServices {
     name,
     lastname,
     temporary_info_id,
-    user_id
+    user_id,
   }) {
     try {
       const params = new URLSearchParams();
@@ -232,12 +232,9 @@ class PaypalServices {
         );
 
         //usuario logueado ===> borrar su carrito de la db luego de la compra
-        if(user_id){
-
-          await ShoppingCartServices.cleanShopingCart(user_id)
-
+        if (user_id) {
+          await ShoppingCartServices.cleanShopingCart(user_id);
         }
-
 
         return;
       } else {

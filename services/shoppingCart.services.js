@@ -13,7 +13,7 @@ class ShoppingCartServices {
       if (!productInfo) {
         throw new Error("Product not found");
       }
-      const { model, metal, rock, chain, intention, user_id, id } =
+      const { model, metal, rock, chain, intention, user_id, id,quantity } =
         await ShoppingCart.create(product);
 
       const newProduct = {
@@ -23,8 +23,10 @@ class ShoppingCartServices {
         chain,
         intention,
         user_id,
+        quantity,
         shoppingCartItem_id: id,
         price: productInfo.price,
+       
       };
       return newProduct;
     } catch (error) {
