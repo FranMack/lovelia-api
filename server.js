@@ -6,7 +6,6 @@ const cors = require("cors");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const models = require("./models/index.models");
 const routes = require("./routes/index.routes");
 const passport = require("passport");
 const { swaggerDocs } = require("./swagger");
@@ -16,8 +15,21 @@ const PORT = envs.PORT;
 
 const app = express();
 
-app.set("trust proxy", 1); // Confía en el proxy de Heroku
+// Force SSL for all requests
+app.use(forceSSL);
 
+// Enable trust proxy for Heroku
+app.set("trust proxy", 1); // Necessary for Heroku to recognize SSL
+
+// Middleware to enforce HTTPS
+app.use((req, res, next) => {
+  if (req.secure || req.headers["x-forwarded-proto"] === "https") {
+    return next();
+  }
+  res.redirect(`https://${req.headers.host}${req.url}`);
+});
+
+// Configure CORS
 app.use(
   cors({
     origin: `${envs.FRONT_URL}`, // URL del frontend
@@ -25,13 +37,14 @@ app.use(
   })
 );
 
+// Other middleware
 app.use(morgan("tiny"));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-// Configura express-session
+// Configure session
 app.use(
   session({
     secret: "tu-secreto-aqui", // Debes establecer tu propia clave secreta
@@ -40,19 +53,23 @@ app.use(
   })
 );
 
-// Luego, configura Passport y sus estrategias de autenticación
+// Configure Passport
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Serve static files
 app.use(express.static(path.join(__dirname, "public")));
 
+// API routes
 app.use("/api/v1", routes);
 
+// Start server
 const server = app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
   swaggerDocs(app, PORT);
 });
 
+// Connect to MongoDB
 mongoose
   .connect(envs.MONGODB_URL)
   .then(() => {
