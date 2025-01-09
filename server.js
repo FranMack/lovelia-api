@@ -15,9 +15,6 @@ const PORT = envs.PORT;
 
 const app = express();
 
-// Force SSL for all requests
-app.use(forceSSL);
-
 // Configure CORS
 app.use(
   cors({
