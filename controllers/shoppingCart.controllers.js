@@ -77,6 +77,7 @@ class ShoppingCartControllers {
     const { id } = req.user;
 
     try {
+     
       const shoppingCart = await ShoppingCartServices.cleanShopingCart(id);
 
       res.status(200).json("Cart empty");

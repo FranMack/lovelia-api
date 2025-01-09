@@ -13,7 +13,7 @@ class ShoppingCartServices {
       if (!productInfo) {
         throw new Error("Product not found");
       }
-      const { model, metal, rock, chain, intention, user_id, id,quantity } =
+      const { model, metal, rock, chain, intention, user_id, id, quantity } =
         await ShoppingCart.create(product);
 
       const newProduct = {
@@ -26,7 +26,6 @@ class ShoppingCartServices {
         quantity,
         shoppingCartItem_id: id,
         price: productInfo.price,
-       
       };
       return newProduct;
     } catch (error) {
@@ -37,7 +36,7 @@ class ShoppingCartServices {
 
   static async addProductToCartUserNotLogged(product) {
     try {
-      const { model, metal, rock, chain, intention } = product;
+      const { model, metal, rock, chain, intention, quantity } = product;
       const productInfo = await Product.findOne({
         model: product.model,
         metal: product.metal,
@@ -55,6 +54,7 @@ class ShoppingCartServices {
         rock,
         chain,
         intention,
+        quantity,
         price: productInfo.price,
       };
       return newProduct;
@@ -122,6 +122,14 @@ class ShoppingCartServices {
 
   static async cleanShopingCart(user_id) {
     try {
+      if (
+        !user_id ||
+        user_id === "null" ||
+        !mongoose.Types.ObjectId.isValid(user_id)
+      ) {
+        console.warn("user_id no es válido:", user_id);
+        return;
+      }
       await ShoppingCart.deleteMany({ user_id });
 
       return;

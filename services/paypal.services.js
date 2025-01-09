@@ -231,6 +231,8 @@ class PaypalServices {
           lastname
         );
 
+     
+
         //usuario logueado ===> borrar su carrito de la db luego de la compra
         if (user_id) {
           await ShoppingCartServices.cleanShopingCart(user_id);
