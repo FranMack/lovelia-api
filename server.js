@@ -18,17 +18,6 @@ const app = express();
 // Force SSL for all requests
 app.use(forceSSL);
 
-// Enable trust proxy for Heroku
-app.set("trust proxy", 1); // Necessary for Heroku to recognize SSL
-
-// Middleware to enforce HTTPS
-app.use((req, res, next) => {
-  if (req.secure || req.headers["x-forwarded-proto"] === "https") {
-    return next();
-  }
-  res.redirect(`https://${req.headers.host}${req.url}`);
-});
-
 // Configure CORS
 app.use(
   cors({
