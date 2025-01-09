@@ -54,24 +54,30 @@ userSchema.methods.validPassword = async function (password) {
     .then((hash) => hash === this.password);
 };
 
-//metodo de clase
+// Middleware de Mongoose para modificar los campos antes de guardarlos
 userSchema.pre("save", async function (next) {
-  // Solo hasheamos la contraseña si es nueva o ha sido modificada
-  if (!this.isModified("password")) {
-    return next();
+  // Convertir el email a minúsculas si es necesario
+  if (this.isModified("email") || this.isNew) {
+    this.email = this.email.toLowerCase();
   }
 
-  try {
-    // Generamos una nueva sal
-    const salt = await bcrypt.genSalt(8);
-    this.salt = salt;
-    // Hasheamos la contraseña con la sal generada
-    const hash = await bcrypt.hash(this.password, salt);
-    this.password = hash;
-    next();
-  } catch (error) {
-    next(error);
+  // Solo hasheamos la contraseña si es nueva o ha sido modificada
+  if (this.isModified("password") || this.isNew) {
+    try {
+      // Generamos una nueva sal
+      const salt = await bcrypt.genSalt(8);
+      this.salt = salt;
+      // Hasheamos la contraseña con la sal generada
+      const hash = await bcrypt.hash(this.password, salt);
+      this.password = hash;
+      return next();
+    } catch (error) {
+      return next(error);
+    }
   }
+
+  // Si no se modifica la contraseña, simplemente pasamos al siguiente middleware
+  next();
 });
 
 const User = mongoose.model("User", userSchema);

@@ -29,6 +29,25 @@ talismanDigitalSchema.set("toJSON", {
   },
 });
 
+
+
+// Middleware de Mongoose para modificar los campos antes de guardarlos
+talismanDigitalSchema.pre("save", async function (next) {
+  // Convertir el email a minúsculas si es necesario
+  if (this.isModified("email") || this.isNew) {
+    this.email = this.email.toLowerCase();
+  }
+
+  // Si no se modifica la contraseña, simplemente pasamos al siguiente middleware
+  next();
+});
+
+
+
+
+
+
+
 const TalismanDigital = mongoose.model("TalismanDigital", talismanDigitalSchema);
 
 module.exports = TalismanDigital;
