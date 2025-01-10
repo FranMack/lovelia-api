@@ -380,12 +380,22 @@ function MailTemplate2(products, deliveryInfo, orderId, name, lastname) {
               </table>
           </div>
   
-          <div class="text-container">
-              <h4>Datos de envío</h4>
-              <p><strong>Dirección:</strong> ${deliveryInfo.address}</p>
-              <p><strong>Teléfono:</strong> ${deliveryInfo.phone}</p>
-              <p><strong>Recibe:</strong> ${deliveryInfo.receiver}</p>
-          </div>
+       ${
+         deliveryInfo.address ? 
+           `<div class="text-container">
+             <h4>Datos de envío</h4>
+             <p>
+               <strong>Dirección:</strong> ${deliveryInfo.address}
+             </p>
+             <p>
+               <strong>Teléfono:</strong> ${deliveryInfo.phone}
+             </p>
+             <p>
+               <strong>Recibe:</strong> ${deliveryInfo.receiver}
+             </p>
+        </div>`:""
+         
+       }
   
           <div class="mailer-footer">
               <table>

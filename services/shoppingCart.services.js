@@ -17,6 +17,7 @@ class ShoppingCartServices {
         await ShoppingCart.create(product);
 
       const newProduct = {
+        product_id: productInfo.id,
         model,
         metal,
         rock,
@@ -49,6 +50,7 @@ class ShoppingCartServices {
       }
 
       const newProduct = {
+        product_id: productInfo.id,
         model,
         metal,
         rock,

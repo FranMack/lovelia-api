@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
 const temporaryTransactionSchema = new mongoose.Schema({
- 
   createdAt: {
     type: Date,
     default: Date.now,
@@ -9,84 +8,74 @@ const temporaryTransactionSchema = new mongoose.Schema({
   },
   billingInfo: {
     name: {
-        type: String,
-      },
-      lastname: {
-        type: String,
-      },
-      rfc: {
-        type: String,
-      },
-      legalName: {
-        type: String,
-      },
-      taxRegime: {
-        type: String,
-      },
+      type: String,
+    },
+    lastname: {
+      type: String,
+    },
+    rfc: {
+      type: String,
+    },
+    legalName: {
+      type: String,
+    },
+    taxRegime: {
+      type: String,
+    },
   },
 
   deliveryInfo: {
     phone: {
-        type: String,
-
-      },
-      address: {
-        type: String,
-
-      },
-      postal_code: {
-        type: String,
-
-      },
-      receiver: {
-        type: String,
-  
-      },
-      price: {
-        type: Number,
-
-      },
+      type: String,
+    },
+    address: {
+      type: String,
+    },
+    postal_code: {
+      type: String,
+    },
+    receiver: {
+      type: String,
+    },
+    price: {
+      type: Number,
+    },
   },
   itemsInfo: [
     {
-        model: {
-            type: String,
-  
-          },
-          metal: {
-            type: String,
-   
-          },
-          rock: {
-            type: String,
+      product_id: {
+        type: String,
+      },
+      quantity: {
+        type: Number,
+      },
+      model: {
+        type: String,
+      },
+      metal: {
+        type: String,
+      },
+      rock: {
+        type: String,
+      },
+      chain: {
+        type: String,
+      },
+      intention: {
+        type: String,
+      },
 
-          },
-          chain: {
-            type: String,
-  
-          },
-          intention: {
-            type: String,
-     
-          },
-        
-          price: {
-            type: Number,
-         
-          },
-          quantity: {
-            type: Number,
-    
-          },
+      price: {
+        type: Number,
+      },
     },
   ],
 
-  talismanDigitalInfo:[
+  talismanDigitalInfo: [
     {
-      email:{type:String}
-    }
-  ]
-
+      email: { type: String },
+    },
+  ],
 });
 
 temporaryTransactionSchema.set("toJSON", {
@@ -97,10 +86,9 @@ temporaryTransactionSchema.set("toJSON", {
   },
 });
 
- const TemporaryTransaction = mongoose.model(
+const TemporaryTransaction = mongoose.model(
   "TemporaryTransaction",
   temporaryTransactionSchema
 );
-
 
 module.exports = TemporaryTransaction;

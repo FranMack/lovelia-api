@@ -4,17 +4,23 @@ const {
   Delivery,
   Billing,
   TalismanDigital,
+  Product,
 } = require("../models/index.models");
 
 class SoldProductServices {
-  static addProduct = async (productList, delivery_id, billing_id) => {
+  static addProduct = async (productsFinalInfo, delivery_id, billing_id) => {
     try {
       // Verificar que el array de productos no esté vacío
-      if (productList.length === 0) {
+
+ 
+      if (productsFinalInfo.length === 0) {
         throw new Error("No products provided");
       }
 
-      const products = productList.map((item) => {
+    
+
+
+      const products = productsFinalInfo.map((item) => {
         // Extraer los valores del documento y convertir a objeto plano
         const productData = {
           model: item.model,
@@ -84,13 +90,13 @@ class SoldProductServices {
       // Crear las promesas para cada producto
       const deliveryId = products.map((item) => item[0].delivery_id);
 
-      console.log("xxxx,deliveryId",deliveryId)
+      console.log("xxxx,deliveryId", deliveryId);
 
       const promises = deliveryId.map((id) => Delivery.findById(id));
 
       // Ejecutar todas las promesas en paralelo
       const deliveryInfo = await Promise.all(promises);
-      console.log("xxxx,deliveryInfo",deliveryInfo)
+      console.log("xxxx,deliveryInfo", deliveryInfo);
 
       // Combinar la información
       const combinedArray = products.map((product) => {
@@ -98,19 +104,22 @@ class SoldProductServices {
           (del) =>
             del && del._id?.toString() === product[0]?.delivery_id?.toString()
         );
-      
+
         const billing = billingResumeInfo.find(
           (bill) =>
             bill && bill.id?.toString() === product[0]?.billing_id?.toString()
         );
-      
+
         return {
           products: product, // convertir a objeto plano si es necesario
-          deliveryDetails: delivery ? (typeof delivery.toObject === 'function' ? delivery.toObject() : delivery) : null,
+          deliveryDetails: delivery
+            ? typeof delivery.toObject === "function"
+              ? delivery.toObject()
+              : delivery
+            : null,
           billingDetails: billing || null,
         };
       });
-      
 
       const hasTalismanDigital = await TalismanDigital.findOne({ email });
 

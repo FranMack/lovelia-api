@@ -11,7 +11,7 @@ class PaypalControllers {
         res.status(error.response.status).json({ error: error.message });
       } else {
         res.status(400).json({ error: error.message });
-        f;
+        ;
       }
     }
   }

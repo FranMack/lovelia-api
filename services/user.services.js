@@ -216,6 +216,19 @@ class UserServices {
         }
       );
 
+      
+      //evito que se guarde info en la db si la respuesta de ASTRO API no fue exitosa
+      if (
+        userHoroscope.status !== 200 ||
+        userHoroscope.statusText.toLocaleLowerCase() !== "ok"
+      ) {
+        return {
+          success: false,
+          message: "ASTRO API returned an unsuccessful status",
+          details: userHoroscope.data,
+        };
+      }
+
       const userHoroscopeInfo = filterNatalHoroscope(userHoroscope.data);
 
       const kinMayaInfo = calcKinMaya(data.year, data.month, data.day);
@@ -232,7 +245,10 @@ class UserServices {
       return { userHoroscopeInfo, chineseInfo, kinMayaInfo };
     } catch (error) {
       console.log(error);
-      throw error;
+      return {
+        success: false,
+        message: "ASTRO API returned an unsuccessful status",
+      };
     }
   }
 
@@ -563,12 +579,7 @@ class UserServices {
     const { location, day, month, year, hour, min, meridiam, email } = userInfo;
 
     try {
-      await TalismanDigital.findOneAndUpdate(
-        { email },
-        { activated: true },
-        { new: true }
-      );
-
+      //obtengo coordenadas y zona horaria de API google
       const { data } = await axios.post(
         `${envs.DOMAIN_URL}/api/v1/user/birthPlace`,
         { birthPlace: location, email: email },
@@ -581,25 +592,28 @@ class UserServices {
       );
       const { coordinates, timeZone } = data;
 
-      const natalHoroscope = await axios.post(
-        `${envs.DOMAIN_URL}/api/v1/user/natalHoroscope`,
-        {
-          email: email,
-          lat: coordinates.lat,
-          lon: coordinates.lng,
-          tzone: timeZone,
-          year,
-          month,
-          day,
-          hour: timeConverter(hour, meridiam),
-          min,
-        },
-        {
-          withCredentials: true,
-          headers: {
-            Cookie: `token=${authToken}`,
-          },
-        }
+      //servicio que se comunica con ASTRO API y procesa la respuesta con la info atrológica necesaria del usuario
+      const astroApiEndpoint = await this.natalHoroscope({
+        email: email,
+        lat: coordinates.lat,
+        lon: coordinates.lng,
+        tzone: timeZone,
+        year,
+        month,
+        day,
+        hour: timeConverter(hour, meridiam),
+        min,
+      });
+
+      if (astroApiEndpoint.success === false) {
+        throw new Error("Something was wrong with astro api");
+      }
+
+      //finalmente cambia el estado del talismán a activado
+      await TalismanDigital.findOneAndUpdate(
+        { email },
+        { activated: true },
+        { new: true }
       );
 
       return;

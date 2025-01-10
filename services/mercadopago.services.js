@@ -1,19 +1,19 @@
 const { envs } = require("../config/env.config");
 const {
-  User,
-  TalismanDigital,
   TemporaryTransaction,
   Delivery,
   Billing,
+  Product,
 } = require("../models/index.models");
 const { MercadoPagoConfig, Preference, Payment } = require("mercadopago");
-const SoldProductServices = require("../services/soldProduct.services");
+
 const { getDate } = require("../helpers/getDate");
 const {
   shopingDetailsEmail2,
-  sendTalismanDigitalActivation,
 } = require("../helpers/mailer");
 
+const { CaptureOrderMethods } = require("../helpers/captureOrderMethods");
+const ShoppingCartServices = require("./shoppingCart.services");
 const client = new MercadoPagoConfig({
   accessToken: envs.MERCADO_PAGO_TOKEN,
 });
@@ -22,12 +22,12 @@ class MercadopagoServices {
   static async createOrder(data) {
     const {
       buyerInfo,
-      items,
       productDetails,
       deliveryDetails,
       billingDetails,
       talismanDigitalOwners,
       user_id,
+      deliveryPrice,
     } = data;
     try {
       const { email, name, lastname } = buyerInfo;
@@ -40,7 +40,25 @@ class MercadopagoServices {
         if (deliveryDetails) {
           temporaryInfoObject.deliveryInfo = deliveryDetails;
         }
-        temporaryInfoObject.itemsInfo = productDetails;
+
+        const productPromises = productDetails.map((item) => {
+          return Product.findById(item.product_id);
+        });
+
+        const productsListInfo = await Promise.all(productPromises);
+
+        const productsFinalInfo = productsListInfo.map((item, index) => ({
+          product_id: item.id,
+          model: item.model,
+          metal: item.metal,
+          rock: item.rock,
+          chain: item.chain,
+          price: item.price,
+          intention: productDetails[index].intention,
+          quantity: productDetails[index].quantity, // Propiedades del objeto en array1
+        }));
+
+        temporaryInfoObject.itemsInfo = productsFinalInfo;
       }
 
       if (talismanDigitalOwners) {
@@ -51,6 +69,24 @@ class MercadopagoServices {
         temporaryInfoObject
       );
       const temporaryInfoId = temporaryInfo.id;
+
+      //calculo el precio total desde la api
+      const items = temporaryInfo.itemsInfo.map((item) => {
+        return {
+          title: item.model,
+          quantity: item.quantity,
+          unit_price: item.price,
+          currency_id: "USD",
+        };
+      });
+      if (deliveryDetails) {
+        items.push({
+          title: "Envío",
+          quantity: 1,
+          unit_price: deliveryPrice,
+          currency_id: "USD",
+        });
+      }
 
       const successUrl = `${envs.FRONT_URL}/thanks-for-buying`;
 
@@ -89,7 +125,6 @@ class MercadopagoServices {
           id: paymentQuery["data.id"],
         });
 
-        const date = getDate();
         const email = paymentQuery.email_acount;
         const name = paymentQuery.name;
         const lastname = paymentQuery.lastname;
@@ -98,8 +133,15 @@ class MercadopagoServices {
         const status = paymentData.status;
         const user_id = paymentQuery.user_id;
 
+        //el status detail nos dice si el pago fue acreditado, ver si es necesario incluirlo en la validación, por ahora no lo puse porque aveces aunque un pago este aprobado demora en acreditarse
+        //const status_detail = paymentData.status_detail;
+
+        if (status !== "approved") {
+          throw new Error(`Payment went wrong: payment status: ${status}`);
+        }
         //VER COMO GENERAR NUMERO DE ORDEN
         const order_id = Math.round(Math.random() * 100000);
+        const date = getDate();
 
         const existingTransaction = await Billing.findOne({
           payment_id,
@@ -112,84 +154,70 @@ class MercadopagoServices {
           return; // Evita procesar el pago y enviar el correo de nuevo.
         }
 
-        //el status detail nos dice si el pago fue acreditado, ver si es necesario incluirlo en la validación, por ahora no lo puse porque aveces aunque un pago este aprobado demora en acreditarse
-        //const status_detail = paymentData.status_detail;
-        if (status === "approved") {
-          const temporaryInfo = await TemporaryTransaction.findById(
-            temporaryInfoId
+        // Procesar información temporal
+        const temporaryInfo = await TemporaryTransaction.findById(
+          temporaryInfoId
+        );
+        const {
+          billingInfo = {},
+          itemsInfo = [],
+          deliveryInfo = {},
+          talismanDigitalInfo = [],
+        } = temporaryInfo;
+
+        const billingDetails = {
+          ...billingInfo,
+          email,
+          date,
+          order_id,
+          payment_id,
+          payment_method: "Mercado Pago",
+        };
+
+        const billingInfoDB = await Billing.create(billingDetails);
+
+        const deliveryId = deliveryInfo?.address
+          ? (await Delivery.create(deliveryInfo))._id
+          : undefined;
+
+        // Procesar productos vendidos
+        if (itemsInfo.length > 0) {
+          await CaptureOrderMethods.processSoldProducts(
+            itemsInfo,
+            deliveryId,
+            billingInfoDB._id
           );
-          const { billingInfo } = temporaryInfo;
-
-          const productDetails = temporaryInfo?.itemsInfo;
-          const deliveryDetails = temporaryInfo?.deliveryInfo;
-          const billingDetails = {
-            ...billingInfo,
-            email,
-            date,
-            order_id,
-            payment_id,
-            payment_method: "Mercado Pago",
-          };
-
-          const billingInfoDB = await Billing.create(billingDetails);
-
-          if (temporaryInfo.itemsInfo.length > 0) {
-            const deliveryInfo = deliveryDetails.address
-              ? await Delivery.create(deliveryDetails)
-              : undefined;
-
-            const productListDB = productDetails
-              ? await SoldProductServices.addProduct(
-                  productDetails,
-                  deliveryInfo ? deliveryInfo._id : undefined,
-                  billingInfoDB._id
-                )
-              : null;
-          }
-
-          if (temporaryInfo.talismanDigitalInfo.length > 0) {
-            const promises = temporaryInfo.talismanDigitalInfo.map(
-              async (item) => {
-                // Crear un registro en TalismanDigital
-                await TalismanDigital.create({
-                  email: item.email,
-                  billing_id: billingInfoDB._id,
-                });
-
-                await sendTalismanDigitalActivation(item.email);
-
-                // Buscar el usuario y actualizar su estado de pago si existe
-                const user = await User.findOne({ email: item.email });
-                if (user) {
-                  user.payment = true;
-                  await user.save();
-                }
-              }
-            );
-
-            // Ejecutar todas las promesas al mismo tiempo
-            const result = await Promise.all(promises);
-          }
-          //enviar mail con detalle de compra
-
-          shopingDetailsEmail2(
-            email,
-            productDetails,
-            deliveryDetails,
-            order_id,
-            name,
-            lastname
-          );
-
-          //usuario logueado ===> borrar su carrito de la db luego de la compra
-          if (user_id) {
-            await ShoppingCartServices.cleanShopingCart(user_id);
-          }
-
-          return;
-        } else {
-          throw new Error(`Payment went wrong: payment status: ${status}`);
         }
+
+        // Procesar talismanes digitales
+        if (talismanDigitalInfo.length > 0) {
+          await CaptureOrderMethods.processTalismanDigital(
+            talismanDigitalInfo,
+            billingInfoDB._id
+          );
+        }
+
+        //enviar mail con detalle de compra
+
+        shopingDetailsEmail2(
+          email,
+          itemsInfo,
+          deliveryInfo,
+          order_id,
+          name,
+          lastname
+        );
+
+        //usuario logueado ===> borrar su carrito de la db luego de la compra
+        if (user_id) {
+          await ShoppingCartServices.cleanShopingCart(user_id);
+        }
+
+        //descontar stock de productos vendidos
+
+        await CaptureOrderMethods.updateProductStock(itemsInfo);
+
+        return;
       }
     } catch (error) {
       console.log(error);
