@@ -49,7 +49,7 @@ function calcKinMaya(year, month, day) {
   return {
     kin,
     solarSail,
-    cosmicTone:tones[cosmicToneIndex-1]
+    cosmicTone:cosmicToneIndex>0?tones[cosmicToneIndex-1]:tones[tones.length-1]
   };
 }
 
@@ -75,7 +75,7 @@ function transformSolarSail(solarSail){
   if(solarSail==="earth"){return "tierraRoja"}
   if(solarSail==="mirrow"){return "perroBlanco"}
   if(solarSail==="storm"){return "tormentaAzul"}
-  if(solarSail==="sun"){return "espejoBlanco"}
+  if(solarSail==="sun"){return "solAmarillo"}
 
   return ""
 
