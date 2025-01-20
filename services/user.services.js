@@ -216,7 +216,6 @@ class UserServices {
         }
       );
 
-      
       //evito que se guarde info en la db si la respuesta de ASTRO API no fue exitosa
       if (
         userHoroscope.status !== 200 ||
@@ -360,22 +359,9 @@ class UserServices {
           : sun === "cancer" || sun === "scorpio" || sun === "pisces"
           ? "linker3"
           : "linker4";
-      const sky =
-        sun === "aries" || sun === "leo" || sun === "sagittarius"
-          ? "skyPlane1"
-          : sun === "gemini" || sun === "libra" || sun === "aquarius"
-          ? "skyPlane2"
-          : sun === "cancer" || sun === "scorpio" || sun === "pisces"
-          ? "skyPlane3"
-          : "skyPlane4";
-      const rocks =
-        sun === "aries" || sun === "leo" || sun === "sagittarius"
-          ? "rocks1"
-          : sun === "gemini" || sun === "libra" || sun === "aquarius"
-          ? "rocks2"
-          : sun === "cancer" || sun === "scorpio" || sun === "pisces"
-          ? "rocks3"
-          : "rocks4";
+
+      const sky = "skyPlane2";
+      const rocks = "rocks2";
       const plants =
         sun === "aries" || sun === "leo" || sun === "sagittarius"
           ? "plants1"
@@ -384,10 +370,7 @@ class UserServices {
           : sun === "cancer" || sun === "scorpio" || sun === "pisces"
           ? "plants3"
           : "plants4";
-      const waterEnvironmentMap =
-        sun === "taurus" || sun === "virgo" || sun === "capricorn"
-          ? "sky3"
-          : "sky2";
+      const waterEnvironmentMap = "sky3";
       const constellation = houseCups.signName.toLocaleLowerCase();
       const horoscope = chineseInfo.animal.toLocaleLowerCase();
       const info = {
@@ -470,6 +453,8 @@ class UserServices {
 
       //estas propiedads debería dejar de pasarlas para la creación del json del usuario en google cloud cuando actualicen el talismán
 
+
+    
       return {
         soundPath,
         numerologySymbol: info.numerology,

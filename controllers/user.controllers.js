@@ -279,7 +279,7 @@ class UserControllers {
 
       // Construir el listado de archivos con sus URLs
       const audioFiles = files.map((file) => ({
-        name: file.name.split("/").pop(), // Nombre del archivo sin el prefijo
+        name: file.name.split("/").pop().split(".")[0], // Nombre del archivo sin el prefijo
         url: `https://storage.googleapis.com/${bucketName}/${file.name}`, // URL pública del archivo
       }));
 
@@ -306,7 +306,7 @@ class UserControllers {
 
       // Construir el listado de archivos con sus URLs
       const audioFiles = files.map((file) => ({
-        name: file.name.split("/").pop(), // Nombre del archivo sin el prefijo
+        name: file.name.split("/").pop().split(".")[0], // Nombre del archivo sin el prefijo
         url: `https://storage.googleapis.com/${bucketName}/${file.name}`, // URL pública del archivo
       }));
 

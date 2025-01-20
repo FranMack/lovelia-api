@@ -3,7 +3,7 @@
 const numberInfo={
 
     1:{
-        title:"NÚMERO 1",
+        title:"NÚMERO DE DESTINO 1",
         text:[
             "El número 1 representa el origen, por lo que simboliza la fuerza vital y el principio de la creación, la unicidad e individualidad. Quienes poseen esta energía numérica se destacan por su voluntad y creatividad, viéndose a sí mismas como personas autosuficientes y con capacidad de liderazgo para materializar sus ideas.",
             "En términos arquetípicos, el 1 se asocia con El Pionero y El Mago. El Pionero busca autodeterminación y se enfoca en la autoexpresión y la creatividad, mientras que el Mago conecta con la intuición y la espiritualidad, canalizando sus innovaciones hacia creaciones significativas.",
@@ -12,7 +12,7 @@ const numberInfo={
           ]
     },
     2:{
-        title:"NÚMERO 2",
+        title:"NÚMERO DE DESTINO 2",
         text:[
             "El número 2 simboliza la dualidad, la transformación y la coexistencia de los opuestos en la vida. Las personas influenciadas por esta energía son receptivas, empáticas, afectuosas y muestran sensibilidad hacia las necesidades de quienes las rodean.",
             "Este número está vinculado al arquetipo El Servidor, dedicado al cuidado de su círculo cercano primero y, a medida que evoluciona, hacia personas que están fuera de él, y también al arquetipo El Huérfano, que busca reconectar con el afecto perdido a través del altruismo.",
@@ -21,7 +21,7 @@ const numberInfo={
           ]
     },
     3:{
-        title:"NÚMERO 3",
+        title:"NÚMERO DE DESTINO 3",
         text:[
             "El número 3 simboliza el poder de la creación, de la expresión y de la expansión, así como las 3 dimensiones del tiempo. Las personas nacidas bajo su influencia suelen ser optimistas y extrovertidas, con una tendencia definida hacia lo artístico. Su arquetipo es El Creador, que inicia un viaje de crecimiento desde lo sensorial hasta lo espiritual y artístico, enfatizando la expresión y la comunicación.",
             "Quienes tienen el 3 como número de destino, deben aprender a comunicarse de manera auténtica y creativa, conectar con sus emociones y abordar la vida con alegría y disfrute. Este aprendizaje resalta la importancia de la libertad, el juego y de considerar la felicidad como un objetivo en la vida. También es bueno que reconozcan el poder creativo del lenguaje y usarlo con amabilidad, buscando la aprobación del entorno para mejorar su conexión con sus habilidades únicas.",
@@ -29,7 +29,7 @@ const numberInfo={
           ]
     },
     4:{
-        title:"NÚMERO 4",
+        title:"NÚMERO DE DESTINO 4",
         text:[
             "Al número 4 se lo asocia con conceptos como el orden, la construcción y la materialización de ideas. Representa la base necesaria para que los sueños y aspiraciones se conviertan en realidad, subrayando la importancia de un enfoque práctico en la vida y la capacidad de crear estructuras sostenibles.",
             "Los arquetipos del número 4 son El Guerrero y El Conquistador, quienes trabajan arduamente para construir su propia realidad. Se centran en la perseverancia, donde la persona se ocupa de hacer tangibles sus ideas y, a medida que progresa, ofrece protección y estabilidad a los demás, estableciendo así un entorno propicio para el crecimiento y desarrollo futuro. La capacidad de asumir responsabilidades es uno de los aspectos más característicos de este número.",
@@ -38,7 +38,7 @@ const numberInfo={
           ]
     },
     5:{
-        title:"NÚMERO 5",
+        title:"NÚMERO DE DESTINO 5",
         text:[
             "El número 5 simboliza la expansión, la libertad y el movimiento impulsado por nuevas ideas que llevan a la aventura y a la transformación. Es un catalizador para el cambio y la exploración de experiencias que rompen con lo convencional. Su esencia está vinculada a la búsqueda constante de lo nuevo, a la adaptación a diversas situaciones y al desafío de los límites establecidos.",
             "El arquetipo del 5 es El Buscador, quien busca constantemente nuevas perspectivas y puede parecer poco comprometido o errante. Sin embargo, esta búsqueda también lo convierte en un líder innovador que promueve cambios.",
@@ -47,7 +47,7 @@ const numberInfo={
           ]
     },
     6:{
-        title:"NÚMERO 6",
+        title:"NÚMERO DE DESTINO 6",
         text:[
             "El número 6 se asocia con el alma humana y representa el amor, la unión y la armonía familiar. Simboliza la importancia de las relaciones interpersonales y destaca el compromiso hacia la familia y la comunidad. La energía que emana del 6 es de compasión y responsabilidad, persiguiendo el bienestar colectivo y el amor incondicional.",
             "El arquetipo de este número de destino es El Amante, que encarna la pasión y la creatividad en la vida. Invita a las personas a vivir inspiradamente, abarcando no solo el amor en las relaciones personales, sino también en la vocación y en los proyectos. A medida que la persona evoluciona, su enfoque se amplía más allá de lo físico hacia una inclusión de aspectos mentales y espirituales, reflejando una búsqueda de conexión más profunda con uno mismo y con los demás.",
@@ -56,7 +56,7 @@ const numberInfo={
           ]
     },
     7:{
-        title:"NÚMERO 7",
+        title:"NÚMERO DE DESTINO 7",
         text:[
             "El número 7 se asocia con la sabiduría interior, la espiritualidad y la búsqueda de la verdad. Es un símbolo de conexión entre el ser humano y su esencia espiritual que representa el triunfo del espíritu sobre las cuestiones materiales.",
             "El arquetipo del 7 es El Guerrero espiritual o El Místico, que simboliza un camino hacia la madurez espiritual y el liderazgo, buscando la perfección en todas las acciones. A medida que evoluciona, la persona bajo la influencia de este número busca unir diferentes realidades, aspirando a la verdad más alta. Su principal reto es discernir entre la realidad y la ilusión, lo que requiere un nivel elevado de conciencia y claridad mental.",
@@ -65,7 +65,7 @@ const numberInfo={
           ]
     },
     8:{
-        title:"NÚMERO 8",
+        title:"NÚMERO DE DESTINO 8",
         text: [
             "El número 8 se asocia con el éxito y la materialización de las ideas. Representa la culminación de un proceso, donde una visión se traduce a la realidad tangible. Bajo su influencia, las personas suelen buscar el bienestar material, mostrando características como la ambición, la firmeza y la autocrítica. Son seres que se orientan hacia la consecución de metas concretas en su vida.",
             "El arquetipo correspondiente al número 8 es El Gobernante, el cual también se considera un Visionario. En las primeras etapas de su vida, la persona puede concentrarse en desarrollar su propia visión, pero con el tiempo, se espera que utilice su capacidad para generar ideas que beneficien a un grupo más amplio. Su fuerza motivadora es el deseo de progreso.",
@@ -74,7 +74,7 @@ const numberInfo={
           ]
     },
     9:{
-        title:"NÚMERO 9",
+        title:"NÚMERO DE DESTINO 9",
         text:[
             "El número 9 simboliza la finalización de ciclos y la plenitud, asociándose con valores como la sabiduría, la compasión y la realización espiritual. Representa también el momento de desapego a lo material y emocional.",
             "Los arquetipos del 9 son El Viajero y El Sabio. El Viajero se caracteriza por la exploración del mundo y la búsqueda de una identidad global, trascendiendo nacionalidades y religiones. Esta exploración también se manifiesta en El Sabio, quien aspira a alcanzar la más alta verdad en su camino de conocimiento y entendimiento. Ambos arquetipos subrayan la importancia del aprendizaje y la expansión de la conciencia hacia un ámbito universal.",

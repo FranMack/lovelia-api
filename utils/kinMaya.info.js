@@ -143,7 +143,7 @@ const kingMayaInfo = {
     ],
   },
 
-  solarSail: {
+  eagle: {
     title: "Águila Azul",
     text: [
       "El símbolo maya Águila Azul representa el potencial de la mente para crear y vislumbrar más allá de lo que se percibe a simple vista. Se refiere a la capacidad de innovar, imaginar y alcanzar una visión más profunda que permita un entendimiento más amplio y global de la realidad.",

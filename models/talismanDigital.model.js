@@ -3,22 +3,19 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
 const talismanDigitalSchema = new mongoose.Schema({
- 
   email: {
     type: String,
-    unique:true,
+    unique: true,
     required: true,
   },
   activated: {
     type: Boolean,
-    default:false
+    default: false,
   },
   billing_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Billing",
   },
-
-
 });
 
 talismanDigitalSchema.set("toJSON", {
@@ -28,8 +25,6 @@ talismanDigitalSchema.set("toJSON", {
     delete ret._id;
   },
 });
-
-
 
 // Middleware de Mongoose para modificar los campos antes de guardarlos
 talismanDigitalSchema.pre("save", async function (next) {
@@ -42,12 +37,9 @@ talismanDigitalSchema.pre("save", async function (next) {
   next();
 });
 
-
-
-
-
-
-
-const TalismanDigital = mongoose.model("TalismanDigital", talismanDigitalSchema);
+const TalismanDigital = mongoose.model(
+  "TalismanDigital",
+  talismanDigitalSchema
+);
 
 module.exports = TalismanDigital;
