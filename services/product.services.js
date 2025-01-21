@@ -43,9 +43,9 @@ class ProductServices {
 
   static async productInStock(data) {
     try {
-      const { model, metal, rock = "", chain = "" } = data;
+      const { product_id } = data;
 
-      const product = await Product.findOne({ model, metal, rock, chain });
+      const product = await Product.findById(product_id);
 
       if (!product) {
         throw new Error("Product not found");
