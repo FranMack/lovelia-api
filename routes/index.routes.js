@@ -6,9 +6,10 @@ const mercadopagoRoutes = require("./mercadopago.routes");
 const paypalRoutes = require("./paypal.routes");
 const soldProductRoutes = require("./soldProduct.routes");
 const alarmRoutes = require("./alarm.routes");
-const productRoutes=require("./product.routes")
-const chatRoutes=require("./chat.routes")
-const shoppingCartRouter=require("./shoppingCart.routes")
+const productRoutes = require("./product.routes");
+const chatRoutes = require("./chat.routes");
+const shoppingCartRouter = require("./shoppingCart.routes");
+const mockDataTemplateRoutes = require("./mock-data-template.routes");
 const AutoCompleteControllers = require("../controllers/autocomplete.controllers");
 require("../config/auth.facebooks");
 const { validateAuth } = require("../midlewares/auth");
@@ -46,8 +47,8 @@ router.use("/payment-paypal", paypalRoutes);
 router.use("/sold-product", soldProductRoutes);
 router.use("/product", productRoutes);
 router.use("/chat", chatRoutes);
-
 router.use("/alarm", alarmRoutes);
 router.use("/shopping-cart", shoppingCartRouter);
+router.use("/template", mockDataTemplateRoutes);
 
 module.exports = router;
