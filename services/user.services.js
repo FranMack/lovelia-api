@@ -639,7 +639,7 @@ class UserServices {
    static async getUserInfo(){
     try{
 
-      const users = await User.find({ role: { $ne: 'admin' } }).select('id name latname email confirmed payment');
+      const users = await User.find({ role: { $ne: 'admin' } }).select('id name lastname email confirmed payment fcmToken');
 
       if(!users){
         throw new Errror ("Usuarios no encontrados")
