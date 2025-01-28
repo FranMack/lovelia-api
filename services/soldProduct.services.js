@@ -132,9 +132,33 @@ class SoldProductServices {
 
     try {
     
-      const listOfOrders = await Sold_Product.find()
-      .populate('delivery_id') // Popula los datos del modelo Delivery
-      .populate('billing_id'); 
+      const listOfOrders = await Sold_Product.aggregate([
+        {
+          // Combinar los productos vendidos que tengan el mismo billing_id
+          $group: {
+            _id: "$billing_id", // Agrupa por billing_id
+            products: { $push: "$$ROOT" }, // Incluye todos los documentos originales en un array llamado "products"
+          },
+        },
+        {
+          // Hace un "lookup" para popular los datos del billing
+          $lookup: {
+            from: "billings", // Nombre de la colección de Billing
+            localField: "_id", // Campo en esta colección (billing_id)
+            foreignField: "_id", // Campo en la colección "billings"
+            as: "billingInfo", // Alias para los datos relacionados
+          },
+        },
+        {
+          // Hace un "lookup" para popular los datos del delivery
+          $lookup: {
+            from: "deliveries", // Nombre de la colección de Delivery
+            localField: "products.delivery_id", // Campo en los productos agrupados
+            foreignField: "_id", // Campo en la colección "deliveries"
+            as: "deliveryInfo", // Alias para los datos relacionados
+          },
+        },
+      ]);
 
       if(!listOfOrders){
         throw new Error("Ordenes no encontradas")
