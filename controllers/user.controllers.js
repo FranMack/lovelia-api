@@ -32,7 +32,7 @@ class UserControllers {
 
       const payload = {
         email: newUser.email,
-        id: newUser._id,
+        id: newUser.id,
       };
 
       if (!newUser.confirm) {
@@ -70,7 +70,7 @@ class UserControllers {
       const payload = {
         email: user.email,
         name: user.name,
-        id: user._id,
+        id: user.id,
         lastname: user.lastname,
         role:user?.role || "user",
       };

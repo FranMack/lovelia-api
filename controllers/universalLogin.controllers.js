@@ -28,7 +28,7 @@ class UniversalLoginControllers {
 
       const payload = {
         email: user.email,
-        id: user._id,
+        id: user.id,
       };
       const token = generateToken(payload);
       res.cookie("token", token);
@@ -63,7 +63,7 @@ class UniversalLoginControllers {
 
       const payload = {
         email: user.email,
-        id: user._id,
+        id: user.id,
       };
       const token = generateToken(payload);
       res.cookie("token", token);

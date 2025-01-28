@@ -51,7 +51,7 @@ class UserServices {
       const newUser = await User.create(data);
       newUser.token = generateTokenConfirmAcount({
         email: newUser.email,
-        id: newUser._id,
+        id: newUser.id,
       });
 
       // Si tiene un TalismanDigital, se marca como pagado
@@ -139,7 +139,7 @@ class UserServices {
       }
       const payload = {
         email: user.email,
-        id: user._id,
+        id: user.id,
       };
 
       const token = generateTokenConfirmAcount(payload);
@@ -639,7 +639,7 @@ class UserServices {
    static async getUserInfo(){
     try{
 
-      const users= await User.find()
+      const users = await User.find({ role: { $ne: 'admin' } }).select('id name latname email confirmed payment');
 
       if(!users){
         throw new Errror ("Usuarios no encontrados")
