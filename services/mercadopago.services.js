@@ -168,6 +168,8 @@ class MercadopagoServices {
         const billingDetails = {
           ...billingInfo,
           email,
+          name,
+          lastname,
           date,
           order_id,
           payment_id,

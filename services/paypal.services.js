@@ -208,6 +208,8 @@ class PaypalServices {
 
       const billingDetails = {
         ...billingInfo,
+        name,
+        lastname,
         email,
         date,
         order_id,

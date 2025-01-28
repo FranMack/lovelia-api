@@ -30,6 +30,18 @@ class SoldProductControllers {
       console.log(error);
     }
   };
+
+  //admin controllers
+
+  static async getListOfOrders(req,res){
+    try{
+      const listOfOrders=await SoldProductServices.getListOfOrders()
+      res.status(200).json(listOfOrders);
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
 }
 
 module.exports = SoldProductControllers;

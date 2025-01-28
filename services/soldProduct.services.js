@@ -12,13 +12,9 @@ class SoldProductServices {
     try {
       // Verificar que el array de productos no esté vacío
 
- 
       if (productsFinalInfo.length === 0) {
         throw new Error("No products provided");
       }
-
-    
-
 
       const products = productsFinalInfo.map((item) => {
         // Extraer los valores del documento y convertir a objeto plano
@@ -90,13 +86,10 @@ class SoldProductServices {
       // Crear las promesas para cada producto
       const deliveryId = products.map((item) => item[0].delivery_id);
 
-   
-
       const promises = deliveryId.map((id) => Delivery.findById(id));
 
       // Ejecutar todas las promesas en paralelo
       const deliveryInfo = await Promise.all(promises);
-
 
       // Combinar la información
       const combinedArray = products.map((product) => {
@@ -132,6 +125,25 @@ class SoldProductServices {
       throw error;
     }
   };
+
+  //admin controllers
+
+  static async getListOfOrders() {
+
+    try {
+    
+      const listOfOrders = await Sold_Product.find()
+      .populate('delivery_id') // Popula los datos del modelo Delivery
+      .populate('billing_id'); 
+
+      if(!listOfOrders){
+        throw new Error("Ordenes no encontradas")
+      }
+      return listOfOrders
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = SoldProductServices;
