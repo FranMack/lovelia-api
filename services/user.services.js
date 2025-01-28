@@ -633,6 +633,26 @@ class UserServices {
       throw error;
     }
   }
+
+   // services admin
+
+   static async getUserInfo(){
+    try{
+
+      const users= await User.find()
+
+      if(!users){
+        throw new Errror ("Usuarios no encontrados")
+      }
+      return users
+
+    }
+
+    catch (error) {
+      console.log(error);
+      throw error;
+    }
+   }
 }
 
 module.exports = UserServices;

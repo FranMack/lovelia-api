@@ -234,6 +234,7 @@ async function shopingDetailsEmail2(
         return "";
       }
       return ` <tr>
+               <th>${item.quantity}</th>
                 <th>${item.model}</th>
                 <th>${item.metal}</th>
                 <th>${item.rock}</th>

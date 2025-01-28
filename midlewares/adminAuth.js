@@ -1,7 +1,7 @@
 const { validateToken, generateToken } = require("../config/token");
 const { cookiesSettings } = require("../config/cookies.settings");
 
-function validateAuth(req, res, next) {
+function validateAdminAuth(req, res, next) {
   const token = req.cookies.token;
 
   if (!token) {
@@ -13,7 +13,7 @@ function validateAuth(req, res, next) {
   // Validar el token
   const user = validateToken(token);
 
-  if (!user) {
+  if (!user || user.role !=="admin") {
     return res.status(401).json({
       error: "Unauthorized",
     });
@@ -44,4 +44,4 @@ function validateAuth(req, res, next) {
   next();
 }
 
-module.exports = { validateAuth };
+module.exports = { validateAdminAuth };

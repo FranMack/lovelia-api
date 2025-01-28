@@ -7,6 +7,7 @@ const {
   loginValidations,
 } = require("../midlewares/userValidator");
 const { validateAuth } = require("../midlewares/auth");
+const {validateAdminAuth}=require("../midlewares/adminAuth")
 
 
 //Swagger 
@@ -859,5 +860,10 @@ userRouter.post("/consult",UserControllers.formConsult)
 
 userRouter.post("/cleanUserJSON",validateAuth,UserControllers.cleanUserJSON)
 userRouter.post("/check-talisman-acounts",UserControllers.checkTalismanAcounts)
+
+//rutas admin (ver role y midleware)
+userRouter.get("/list",validateAdminAuth,UserControllers.getUserInfo)
+
+
 
 module.exports = userRouter;
