@@ -72,7 +72,10 @@ class UserControllers {
         name: user.name,
         id: user._id,
         lastname: user.lastname,
+        role:user?.role || "user",
       };
+
+      
 
       const token = generateToken(payload);
 
@@ -381,6 +384,25 @@ class UserControllers {
         res.status(400).json({ error: error.message });
       }
     }
+  }
+
+  // controllers admin
+
+  static async getUserInfo(req,res){
+
+    try {
+      const users = await UserServices.getUserInfo();
+
+      res.status(200).json(users);
+    } catch (error) {
+      console.log(error);
+      if (error.response) {
+        res.status(error.response.status).json({ error: error.message });
+      } else {
+        res.status(400).json({ error: error.message });
+      }
+    }
+
   }
 }
 

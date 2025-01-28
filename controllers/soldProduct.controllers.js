@@ -15,6 +15,13 @@ class SoldProductControllers {
   static productList = async (req, res) => {
     try {
       const { email } = req.params;
+      const user=req.user;
+
+      if(email !==req.user.email && user.role!=="admin"){
+        return res.status(401).json({
+          error: "Unauthorized",
+        });
+      }
 
       const products = await SoldProductServices.productList(email);
 

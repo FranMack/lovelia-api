@@ -367,6 +367,7 @@ function MailTemplate2(products, deliveryInfo, orderId, name, lastname) {
               <table class="product-list">
                   <thead>
                       <tr>
+                          <th>Unidades</th>
                           <th>Modelo</th>
                           <th>Metal</th>
                           <th>Piedra</th>

@@ -90,13 +90,13 @@ class SoldProductServices {
       // Crear las promesas para cada producto
       const deliveryId = products.map((item) => item[0].delivery_id);
 
-      console.log("xxxx,deliveryId", deliveryId);
+   
 
       const promises = deliveryId.map((id) => Delivery.findById(id));
 
       // Ejecutar todas las promesas en paralelo
       const deliveryInfo = await Promise.all(promises);
-      console.log("xxxx,deliveryInfo", deliveryInfo);
+
 
       // Combinar la información
       const combinedArray = products.map((product) => {
