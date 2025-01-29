@@ -4,36 +4,79 @@ const mongoose = require("mongoose");
 class ShoppingCartServices {
   static async addProduct(product) {
     try {
+      // Buscar la información del producto
       const productInfo = await Product.findOne({
         model: product.model,
         metal: product.metal,
         rock: product.rock,
         chain: product.chain,
       });
+  
       if (!productInfo) {
         throw new Error("Product not found");
       }
-      const { model, metal, rock, chain, intention, user_id, id, quantity } =
-        await ShoppingCart.create(product);
-
-      const newProduct = {
+  
+      // Buscar si el producto ya está en el carrito
+      const productAlreadyInCart = await ShoppingCart.findOne({
         product_id: productInfo.id,
-        model,
-        metal,
-        rock,
-        chain,
-        intention,
-        user_id,
-        quantity,
-        shoppingCartItem_id: id,
+        intention: product.intention,
+      });
+  
+      console.log("xxxxxxxxxxx", productAlreadyInCart);
+  
+      if (!productAlreadyInCart) {
+        // Crear un nuevo producto en el carrito
+        const createdProduct = await ShoppingCart.create({
+          ...product,
+          product_id: productInfo.id,
+        });
+  
+        const newProduct = {
+          product_id: productInfo.id,
+          model: createdProduct.model,
+          metal: createdProduct.metal,
+          rock: createdProduct.rock,
+          chain: createdProduct.chain,
+          intention: createdProduct.intention,
+          user_id: createdProduct.user_id,
+          quantity: createdProduct.quantity,
+          shoppingCartItem_id: createdProduct.id,
+          price: productInfo.price,
+        };
+  
+        return newProduct;
+      }
+  
+      // Actualizar la cantidad si el producto ya está en el carrito
+      const updatedProduct = await ShoppingCart.findOneAndUpdate(
+        {
+          product_id: productAlreadyInCart.product_id,
+          user_id: productAlreadyInCart.user_id,
+        },
+        { $inc: { quantity: 1 } },
+        { new: true } // Retorna el documento actualizado
+      );
+  
+      const updatedProductInfo = {
+        product_id: productInfo.id,
+        model: updatedProduct.model,
+        metal: updatedProduct.metal,
+        rock: updatedProduct.rock,
+        chain: updatedProduct.chain,
+        intention: updatedProduct.intention,
+        user_id: updatedProduct.user_id,
+        quantity: updatedProduct.quantity,
+        shoppingCartItem_id: updatedProduct.id,
         price: productInfo.price,
       };
-      return newProduct;
+  
+      return updatedProductInfo;
     } catch (error) {
       console.error("Error en el shopping cart:", error.message);
       throw error;
     }
   }
+  
 
   static async addProductToCartUserNotLogged(product) {
     try {
@@ -71,7 +114,7 @@ class ShoppingCartServices {
       const shoppingCart = await ShoppingCart.find({ user_id: userId });
 
       if (!shoppingCart.length) {
-        throw new Error("Shopping cart is empty");
+        return [];
       }
 
       const promises = shoppingCart.map((item) => {

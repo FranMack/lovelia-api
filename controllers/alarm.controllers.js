@@ -4,6 +4,7 @@ class AlarmControllers{
     static async setAlarm (req,res){
         const data=req.body;
         const {id}=req.user;
+        
         try{
 
             const newAlarm= await AlarmServices.setAlarm(data,id)

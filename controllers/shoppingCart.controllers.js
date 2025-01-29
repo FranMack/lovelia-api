@@ -4,6 +4,7 @@ class ShoppingCartControllers {
   static async addProductToCart(req, res) {
     try {
       const { id } = req.user;
+   
       const product = { user_id: id, ...req.body };
 
       const newProduct = await ShoppingCartServices.addProduct(product);

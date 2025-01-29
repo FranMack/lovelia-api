@@ -56,10 +56,12 @@ const userSchema = new mongoose.Schema({
 
 
 userSchema.set("toJSON", {
-  virtuals: true,
-  versionKey: false,
-  transform: function (doc, ret, options) {
-    delete ret._id;
+  virtuals: true, // 🔹 Activa los virtuals
+  versionKey: false, // 🔹 Elimina __v
+  transform: function (doc, ret) {
+    ret.id = ret._id; // 🔹 Copia `_id` en `id`
+    delete ret._id; // 🔹 Elimina `_id`
+    return ret;
   },
 });
 

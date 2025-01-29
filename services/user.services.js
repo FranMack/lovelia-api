@@ -74,6 +74,8 @@ class UserServices {
     try {
       const user = await User.findOne({ email: data.email });
 
+      
+
       if (!user) {
         throw new Error("Credenciales erroneas");
       }
@@ -410,6 +412,7 @@ class UserServices {
       console.log(
         `El archivo ${fileName} ha sido guardado correctamente en el bucket ${bucketName}`
       );
+     
 
       //INFO PARA ADN ENERGETICO
       const numberUserInfo = numberInfo[chineseInfo.number];

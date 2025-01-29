@@ -70,12 +70,12 @@ class UserControllers {
       const payload = {
         email: user.email,
         name: user.name,
-        id: user.id,
+        id: user._id,
         lastname: user.lastname,
-        role:user?.role || "user",
+        role: user?.role || "user",
       };
 
-      
+      console.log("");
 
       const token = generateToken(payload);
 
@@ -224,6 +224,13 @@ class UserControllers {
   static async getUserAstroInfo(req, res) {
     const { email } = req.query;
     try {
+      const user = req.user;
+
+      if (email !== req.user.email && user.role !== "admin") {
+        return res.status(401).json({
+          error: "Unauthorized",
+        });
+      }
       const userInfo = await UserServices.getUserAstroInfo(email);
 
       res.json(userInfo);
@@ -239,6 +246,13 @@ class UserControllers {
   static async cleanUserJSON(req, res) {
     const { email } = req.body;
     try {
+      const user = req.user;
+
+      if (email !== req.user.email && user.role !== "admin") {
+        return res.status(401).json({
+          error: "Unauthorized",
+        });
+      }
       const userJSON = await UserServices.cleanUserJSON(email);
       res.status(200).json("json file deleted");
     } catch (error) {
@@ -248,6 +262,13 @@ class UserControllers {
 
   static async addIntention(req, res) {
     const { intention, email } = req.body;
+    const user = req.user;
+
+    if (email !== req.user.email && user.role !== "admin") {
+      return res.status(401).json({
+        error: "Unauthorized",
+      });
+    }
     try {
       const userIntention = await UserServices.addIntention(intention, email);
       res.status(200).json(userIntention);
@@ -258,6 +279,12 @@ class UserControllers {
 
   static async userIntention(req, res) {
     const { email } = req.params;
+    const user = req.user;
+    if (email !== req.user.email && user.role !== "admin") {
+      return res.status(401).json({
+        error: "Unauthorized",
+      });
+    }
     try {
       const userIntention = await UserServices.userIntention(email);
       res.status(200).json(userIntention);
@@ -353,6 +380,15 @@ class UserControllers {
 
   static async activateTalisman(req, res) {
     const authToken = req.cookies.token;
+    const { email } = req.body;
+    const user = req.user;
+
+    if (email !== req.user.email && user.role !== "admin") {
+      return res.status(401).json({
+        error: "Unauthorized",
+      });
+    }
+
     try {
       const activation = await UserServices.activateTalisman(
         req.body,
@@ -388,8 +424,7 @@ class UserControllers {
 
   // controllers admin
 
-  static async getUserInfo(req,res){
-
+  static async getUserInfo(req, res) {
     try {
       const users = await UserServices.getUserInfo();
 
@@ -402,7 +437,6 @@ class UserControllers {
         res.status(400).json({ error: error.message });
       }
     }
-
   }
 }
 

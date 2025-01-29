@@ -3,7 +3,7 @@ const { soundPathFile } = require("./sound");
 
 function filterNatalHoroscope(obj) {
   const aspectingPlanets = [0, 1];
-  const aspectedPlanets = [2,3,4,5,6,7,8,9];
+  const aspectedPlanets = [1,2,3,4,5,6,7,8,9];
 
   const aspectsNames = ["Conjunction", "Square", "Opposition"];
 

@@ -5,6 +5,10 @@ const ShoppingCartSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  product_id: {
+    type: String,
+    required: true,
+  },
   metal: {
     type: String,
     required: true,
