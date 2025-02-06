@@ -97,6 +97,15 @@ const planetsAndAspectsInfo = {
     },
   },
 
+  aspectingPlanet:{
+    Sun:{
+      title:"Sol"
+    },
+    Moon:{
+      title:"Luna"
+    },
+  },
+
   aspects: {
     Conjunction: {
       title: "Conjunción - 0°",

@@ -432,7 +432,8 @@ class UserServices {
       const aspectsUserInfo = aspects.map((aspect) => {
         return {
           planet: planetsAndAspectsInfo.planets[aspect.aspectedPlanet],
-          aspect: planetsAndAspectsInfo.aspects[aspect.aspectType].title,
+          aspect: planetsAndAspectsInfo.aspects[aspect.aspectType].title.split("-")[0],
+          aspectingPlanet:planetsAndAspectsInfo.aspectingPlanet[aspect.aspectingPlanet]
         };
       });
 
