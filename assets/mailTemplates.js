@@ -7,7 +7,7 @@ const facebookLogo =
 const instagramLogo =
   "https://res.cloudinary.com/di9ikwaxu/image/upload/v1727872236/facebook_logo.png";
 
-function MailTemplate1(name = "", title, content, link, buttonText) {
+function MailTemplate1(name = "", title, content, link, buttonText,youtubeDemo) {
   return `
      <!DOCTYPE html>
   <html>
@@ -150,6 +150,21 @@ function MailTemplate1(name = "", title, content, link, buttonText) {
           <div class="button-container">
               <a href="${link}" target="_blank" class="button">${buttonText}</a>
           </div>
+
+
+            ${youtubeDemo ? `
+              <div class="text-container">
+              <p>Aprende a crear tu talismán: Te mostramos cómo hacerlo en unos simples pasos.🌙🔮</p>
+          </div>`:""}
+
+          ${youtubeDemo ? `
+            <div class="button-container" style="margin-top:25px;">
+              <a href="${youtubeDemo.link}" target="_blank" class="button">${youtubeDemo.title}</a>
+            </div>` : ""}
+
+
+
+          
           <div class="mailer-footer">
               <table>
                   <tr>

@@ -196,7 +196,12 @@ async function sendTalismanDigitalActivation(destinatario) {
 
   const nombreUsuario = "";
 
-  const html = MailTemplate1(nombreUsuario, title, content, link, buttonText);
+  const youtubeDemo={
+    link:"https://www.youtube.com/watch?v=KcfLxYJLq9Q&ab_channel=FoxSportsArgentina",
+    title:"Ver Demostración"
+  }
+
+  const html = MailTemplate1(nombreUsuario, title, content, link, buttonText,youtubeDemo);
 
   const mailOptions = {
     from: `Lovelia <${envs.USER_MAILER}>`,

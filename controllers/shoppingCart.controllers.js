@@ -91,6 +91,33 @@ class ShoppingCartControllers {
       }
     }
   }
+
+
+  static async updateProductQuantity(req,res){
+    try{
+      const {shoppingCartItem_id,quantity,product_id}=req.body
+
+      const updatedProduct=await ShoppingCartServices.updateProductQuantity(shoppingCartItem_id,quantity,product_id);
+
+      res.status(200).json(updatedProduct)
+
+      
+    }
+
+    catch (error) {
+      console.log(error);
+      if (error.response) {
+        res.status(error.response.status).json({ error: error.message });
+      } else {
+        res.status(400).json({ error: error.message });
+      }
+    }
+
+    
+  }
+
+
+
 }
 
 module.exports = { ShoppingCartControllers };

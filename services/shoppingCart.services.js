@@ -11,26 +11,26 @@ class ShoppingCartServices {
         rock: product.rock,
         chain: product.chain,
       });
-  
+
       if (!productInfo) {
         throw new Error("Product not found");
       }
-  
+
       // Buscar si el producto ya está en el carrito
       const productAlreadyInCart = await ShoppingCart.findOne({
         product_id: productInfo.id,
         intention: product.intention,
       });
-  
-      console.log("xxxxxxxxxxx", productAlreadyInCart);
-  
+
+
+
       if (!productAlreadyInCart) {
         // Crear un nuevo producto en el carrito
         const createdProduct = await ShoppingCart.create({
           ...product,
           product_id: productInfo.id,
         });
-  
+
         const newProduct = {
           product_id: productInfo.id,
           model: createdProduct.model,
@@ -43,10 +43,10 @@ class ShoppingCartServices {
           shoppingCartItem_id: createdProduct.id,
           price: productInfo.price,
         };
-  
+
         return newProduct;
       }
-  
+
       // Actualizar la cantidad si el producto ya está en el carrito
       const updatedProduct = await ShoppingCart.findOneAndUpdate(
         {
@@ -56,7 +56,7 @@ class ShoppingCartServices {
         { $inc: { quantity: 1 } },
         { new: true } // Retorna el documento actualizado
       );
-  
+
       const updatedProductInfo = {
         product_id: productInfo.id,
         model: updatedProduct.model,
@@ -69,14 +69,13 @@ class ShoppingCartServices {
         shoppingCartItem_id: updatedProduct.id,
         price: productInfo.price,
       };
-  
+
       return updatedProductInfo;
     } catch (error) {
       console.error("Error en el shopping cart:", error.message);
       throw error;
     }
   }
-  
 
   static async addProductToCartUserNotLogged(product) {
     try {
@@ -180,6 +179,51 @@ class ShoppingCartServices {
       return;
     } catch (error) {
       console.error("Error en el shopping cart:", error.message);
+      throw error;
+    }
+  }
+
+  static async updateProductQuantity(shoppingCartItem_id, quantity,product_id) {
+    try {
+    
+
+      const product = await Product.findById(product_id);
+
+      if (product.stock < quantity) {
+        throw new Error("No hay stock disponible");
+      }
+
+
+      if(shoppingCartItem_id){
+        const productInCart = await ShoppingCart.findById(shoppingCartItem_id);
+
+        if (!productInCart) {
+          throw new Error("Producto no encontrado en el carrito");
+        }
+
+        productInCart.quantity = quantity;
+
+        await productInCart.save();
+  
+        return productInCart;
+
+      }
+
+
+      console.log("xxxxxxxxxx",shoppingCartItem_id)
+      return "todo"
+    
+
+
+
+
+
+    
+    } catch (error) {
+      console.error(
+        "Error al actualizar la cantidad el producto",
+        error.message
+      );
       throw error;
     }
   }
