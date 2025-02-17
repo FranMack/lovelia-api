@@ -74,8 +74,6 @@ class UserServices {
     try {
       const user = await User.findOne({ email: data.email });
 
-      
-
       if (!user) {
         throw new Error("Credenciales erroneas");
       }
@@ -384,7 +382,6 @@ class UserServices {
         sunHouse: sunHouse,
         moonHouse: moonHouse,
         rocks: rocks,
-        plants: plants,
         numerology: chineseInfo.number,
         sky: sky,
         waterEnvironmentMap: waterEnvironmentMap,
@@ -412,7 +409,6 @@ class UserServices {
       console.log(
         `El archivo ${fileName} ha sido guardado correctamente en el bucket ${bucketName}`
       );
-     
 
       //INFO PARA ADN ENERGETICO
       const numberUserInfo = numberInfo[chineseInfo.number];
@@ -432,8 +428,12 @@ class UserServices {
       const aspectsUserInfo = aspects.map((aspect) => {
         return {
           planet: planetsAndAspectsInfo.planets[aspect.aspectedPlanet],
-          aspect: planetsAndAspectsInfo.aspects[aspect.aspectType].title.split("-")[0],
-          aspectingPlanet:planetsAndAspectsInfo.aspectingPlanet[aspect.aspectingPlanet]
+          aspect:
+            planetsAndAspectsInfo.aspects[aspect.aspectType].title.split(
+              "-"
+            )[0],
+          aspectingPlanet:
+            planetsAndAspectsInfo.aspectingPlanet[aspect.aspectingPlanet],
         };
       });
 
@@ -457,8 +457,6 @@ class UserServices {
 
       //estas propiedads debería dejar de pasarlas para la creación del json del usuario en google cloud cuando actualicen el talismán
 
-
-    
       return {
         soundPath,
         numerologySymbol: info.numerology,
@@ -569,6 +567,7 @@ class UserServices {
 
     try {
       //obtengo coordenadas y zona horaria de API google
+      
       const { data } = await axios.post(
         `${envs.DOMAIN_URL}/api/v1/user/birthPlace`,
         { birthPlace: location, email: email },
@@ -638,25 +637,23 @@ class UserServices {
     }
   }
 
-   // services admin
+  // services admin
 
-   static async getUserInfo(){
-    try{
+  static async getUserInfo() {
+    try {
+      const users = await User.find({ role: { $ne: "admin" } }).select(
+        "id name lastname email confirm payment fcmToken"
+      );
 
-      const users = await User.find({ role: { $ne: 'admin' } }).select('id name lastname email confirm payment fcmToken');
-
-      if(!users){
-        throw new Errror ("Usuarios no encontrados")
+      if (!users) {
+        throw new Errror("Usuarios no encontrados");
       }
-      return users
-
-    }
-
-    catch (error) {
+      return users;
+    } catch (error) {
       console.log(error);
       throw error;
     }
-   }
+  }
 }
 
 module.exports = UserServices;

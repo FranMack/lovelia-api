@@ -75,21 +75,15 @@ class UserControllers {
         role: user?.role || "user",
       };
 
-      console.log("");
-
       const token = generateToken(payload);
 
       // Set the cookie and log error if it fails
-      try {
-        res.cookie("token", token, cookiesSettings);
-      } catch (error) {
-        console.log("Error when trying to save cookies", error);
-      }
+
+      res.cookie("token", token, cookiesSettings);
 
       res.status(200).json({
         ...payload,
         token,
-        lastname: user.lastname,
         subscription: user.payment,
         talismanActivated: user.talismanActivated,
       });
