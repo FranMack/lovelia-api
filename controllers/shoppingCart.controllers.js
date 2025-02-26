@@ -4,7 +4,7 @@ class ShoppingCartControllers {
   static async addProductToCart(req, res) {
     try {
       const { id } = req.user;
-   
+
       const product = { user_id: id, ...req.body };
 
       const newProduct = await ShoppingCartServices.addProduct(product);
@@ -78,7 +78,6 @@ class ShoppingCartControllers {
     const { id } = req.user;
 
     try {
-     
       const shoppingCart = await ShoppingCartServices.cleanShopingCart(id);
 
       res.status(200).json("Cart empty");
@@ -92,19 +91,18 @@ class ShoppingCartControllers {
     }
   }
 
+  static async updateProductQuantity(req, res) {
+    try {
+      const { shoppingCartItem_id, quantity, product_id } = req.body;
 
-  static async updateProductQuantity(req,res){
-    try{
-      const {shoppingCartItem_id,quantity,product_id}=req.body
+      const updatedProduct = await ShoppingCartServices.updateProductQuantity(
+        shoppingCartItem_id,
+        quantity,
+        product_id
+      );
 
-      const updatedProduct=await ShoppingCartServices.updateProductQuantity(shoppingCartItem_id,quantity,product_id);
-
-      res.status(200).json(updatedProduct)
-
-      
-    }
-
-    catch (error) {
+      res.status(200).json(updatedProduct);
+    } catch (error) {
       console.log(error);
       if (error.response) {
         res.status(error.response.status).json({ error: error.message });
@@ -112,12 +110,7 @@ class ShoppingCartControllers {
         res.status(400).json({ error: error.message });
       }
     }
-
-    
   }
-
-
-
 }
 
 module.exports = { ShoppingCartControllers };

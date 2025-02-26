@@ -1,6 +1,5 @@
 const SoldProductServices = require("../services/soldProduct.services");
 
-
 class SoldProductControllers {
   static addProduct = async (req, res) => {
     try {
@@ -15,9 +14,9 @@ class SoldProductControllers {
   static productList = async (req, res) => {
     try {
       const { email } = req.params;
-      const user=req.user;
+      const user = req.user;
 
-      if(email !==req.user.email && user.role!=="admin"){
+      if (email !== req.user.email && user.role !== "admin") {
         return res.status(401).json({
           error: "Unauthorized",
         });
@@ -33,12 +32,11 @@ class SoldProductControllers {
 
   //admin controllers
 
-  static async getListOfOrders(req,res){
-    try{
-      const listOfOrders=await SoldProductServices.getListOfOrders()
+  static async getListOfOrders(req, res) {
+    try {
+      const listOfOrders = await SoldProductServices.getListOfOrders();
       res.status(200).json(listOfOrders);
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
     }
   }

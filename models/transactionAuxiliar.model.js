@@ -40,6 +40,10 @@ const temporaryTransactionSchema = new mongoose.Schema({
     price: {
       type: Number,
     },
+    currency:{
+      type:String,
+      require:true
+    }
   },
   itemsInfo: [
     {
@@ -67,7 +71,12 @@ const temporaryTransactionSchema = new mongoose.Schema({
 
       price: {
         type: Number,
+        require:true
       },
+      currency:{
+        type:String,
+        require:true
+      }
     },
   ],
 

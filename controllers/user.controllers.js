@@ -341,6 +341,35 @@ class UserControllers {
     }
   }
 
+
+
+  static async timerSounds(req, res) {
+    const storage = new Storage({
+      projectId: "leafy-bond-427721-f6", // Reemplaza con tu Project ID
+      keyFilename: path.join(__dirname, "../googleCloudCredentials.json"), // Ruta al archivo de credenciales
+    });
+
+    const bucketName = "threejs-api"; // Nombre del bucket
+
+    try {
+      // Filtrar archivos solo en la "carpeta" meditations
+      const [files] = await storage.bucket(bucketName).getFiles({
+        prefix: "public/timer_sounds/", // Ruta a la carpeta en el bucket
+      });
+
+      // Construir el listado de archivos con sus URLs
+      const audioFiles = files.map((file) => ({
+        name: file.name.split("/").pop().split(".")[0], // Nombre del archivo sin el prefijo
+        url: `https://storage.googleapis.com/${bucketName}/${file.name}`, // URL pública del archivo
+      }));
+
+      res.json(audioFiles);
+    } catch (error) {
+      console.error("Error al obtener los sondidos del timer", error);
+      res.status(500).send("rror al obtener los sondidos del timer");
+    }
+  }
+
   static async formConsult(req, res) {
     const { name, subject, email, message } = req.body;
     try {
@@ -360,6 +389,7 @@ class UserControllers {
       const { fcmToken } = req.params;
       const { email } = req.user;
 
+      console.log("tokennnnnnnnnnnnnnnn",fcmToken)
       const saveToken = await UserServices.sessionFmcToken(email, fcmToken);
 
       res.send(req.user);

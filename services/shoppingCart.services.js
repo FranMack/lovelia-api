@@ -41,7 +41,9 @@ class ShoppingCartServices {
           user_id: createdProduct.user_id,
           quantity: createdProduct.quantity,
           shoppingCartItem_id: createdProduct.id,
-          price: productInfo.price,
+          price_AR: productInfo.price_AR,
+          price_MX: productInfo.price_MX,
+          price_RM: productInfo.price_RM,
         };
 
         return newProduct;
@@ -99,7 +101,9 @@ class ShoppingCartServices {
         chain,
         intention,
         quantity,
-        price: productInfo.price,
+        price_AR: productInfo.price_AR,
+          price_MX: productInfo.price_MX,
+          price_RM: productInfo.price_RM,
       };
       return newProduct;
     } catch (error) {
@@ -138,7 +142,9 @@ class ShoppingCartServices {
           rock: obj2.rock,
           chain: obj2.chain,
           image: obj2.images[0],
-          price: obj2.price,
+          price_AR: obj2.price_AR,
+          price_MX: obj2.price_MX,
+          price_RM: obj2.price_RM,
           product_id: obj2.id,
         };
       });
@@ -210,7 +216,7 @@ class ShoppingCartServices {
       }
 
 
-      console.log("xxxxxxxxxx",shoppingCartItem_id)
+    
       return "todo"
     
 

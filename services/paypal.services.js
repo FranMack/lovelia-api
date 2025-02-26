@@ -20,6 +20,7 @@ class PaypalServices {
     const {
       buyerInfo,
       productDetails,
+      currency,
       deliveryDetails,
       billingDetails,
       talismanDigitalOwners,
@@ -29,13 +30,15 @@ class PaypalServices {
     try {
       const { email, name, lastname } = buyerInfo;
 
+    
+
       const temporaryInfoObject = {
         billingInfo: billingDetails,
       };
 
       if (productDetails.length > 0) {
         if (deliveryDetails) {
-          temporaryInfoObject.deliveryInfo = deliveryDetails;
+          temporaryInfoObject.deliveryInfo = {...deliveryDetails,currency};
         }
 
         const productPromises = productDetails.map((item) => {
@@ -50,7 +53,8 @@ class PaypalServices {
           metal: item.metal,
           rock: item.rock,
           chain: item.chain,
-          price: item.price,
+          price: currency==="Argentina" ?item.price_AR :currency==="Mexico" ?item.price_MX :item.price_RM ,
+         currency:currency,
           intention: productDetails[index].intention,
           quantity: productDetails[index].quantity, // Propiedades del objeto en array1
         }));
@@ -65,6 +69,9 @@ class PaypalServices {
       const temporaryInfo = await TemporaryTransaction.create(
         temporaryInfoObject
       );
+
+      
+      
       const temporaryInfoId = temporaryInfo.id;
 
       //calculo el precio total desde la api

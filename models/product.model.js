@@ -15,8 +15,15 @@ const ProductSchema = new mongoose.Schema({
   chain: {
     type: String,
   },
-
-  price: {
+  price_AR: {
+    type: Number,
+    required: true,
+  },
+  price_MX: {
+    type: Number,
+    required: true,
+  },
+  price_RM: {
     type: Number,
     required: true,
   },

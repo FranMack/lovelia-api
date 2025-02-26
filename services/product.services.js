@@ -18,6 +18,8 @@ class ProductServices {
 
   static async addListOfProducts() {
     try {
+
+      console.log("list",productList)
       const newListOfProducts = await Product.insertMany(productList);
 
       return;

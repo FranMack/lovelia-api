@@ -21,6 +21,10 @@ const deliverySchema = new mongoose.Schema({
     type: Number,
   
   },
+  currency: {
+    type: String,
+    required: true,
+  },
 });
 
 deliverySchema.set("toJSON", {

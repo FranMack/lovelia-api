@@ -850,6 +850,12 @@ userRouter.get(
   UserControllers.sounds
 );
 
+userRouter.get(
+  "/timer-sounds",validateAuth,
+  UserControllers.timerSounds
+);
+
+
 
 userRouter.post("/activate-talisman",validateAuth,UserControllers.activateTalisman)
 

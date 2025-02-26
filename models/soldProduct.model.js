@@ -22,6 +22,10 @@ const soldProductSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  currency: {
+    type: String,
+    required: true,
+  },
   quantity: {
     type: Number,
     required: true,

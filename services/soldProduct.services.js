@@ -25,6 +25,7 @@ class SoldProductServices {
           chain: item.chain,
           intention: item.intention,
           price: item.price,
+          currency:item.currency,
           quantity: item.quantity,
           delivery_id: delivery_id ? delivery_id : null,
           billing_id: billing_id ? billing_id : null,
@@ -60,6 +61,8 @@ class SoldProductServices {
 
       const billing = await Billing.find({ email });
 
+   
+
       if (!billing) {
         throw new Error("Billing not found");
       }
@@ -83,9 +86,11 @@ class SoldProductServices {
 
       const products = await Promise.all(promises1);
 
-      // Crear las promesas para cada producto
-      const deliveryId = products.map((item) => item[0].delivery_id);
+      
 
+      // Crear las promesas para cada producto
+      const deliveryId = products.map((item) => item[0]?.delivery_id);
+      console.log("deliveryIdxxxxxxxxxxxxxxx",deliveryId)
       const promises = deliveryId.map((id) => Delivery.findById(id));
 
       // Ejecutar todas las promesas en paralelo

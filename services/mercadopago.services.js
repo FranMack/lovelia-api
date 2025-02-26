@@ -23,6 +23,7 @@ class MercadopagoServices {
     const {
       buyerInfo,
       productDetails,
+      currency,
       deliveryDetails,
       billingDetails,
       talismanDigitalOwners,
@@ -53,7 +54,8 @@ class MercadopagoServices {
           metal: item.metal,
           rock: item.rock,
           chain: item.chain,
-          price: item.price,
+          price: currency==="Argentina" ?item.price_AR :currency==="Mexico" ?item.price_MX :item.price_RM ,
+          currency:currency,
           intention: productDetails[index].intention,
           quantity: productDetails[index].quantity, // Propiedades del objeto en array1
         }));
