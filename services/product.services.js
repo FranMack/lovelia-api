@@ -2,19 +2,37 @@ const { Product } = require("../models/index.models");
 const { productList } = require("../utils/productsInfo");
 
 class ProductServices {
-  static async addProduct(data) {
+  static async newOrUpdatedProduct(data) {
     try {
-      const newProduct = await Product.create(data);
-      if (!newProduct) {
-        throw new Error("Something was wrong, try again");
+      const { productId, ...restData } = data;
+  
+      if (!productId) {
+        const newProduct = await Product.create(restData);
+        if (!newProduct) {
+          throw new Error("Something went wrong, try again");
+        }
+        return newProduct;
       }
+  
+    
+  
+      const updatedProduct = await Product.findByIdAndUpdate(
+        productId,
+        { $set: restData },
+        { new: true } // Devuelve el producto actualizado
+      );
 
-      return newProduct;
+      if (!updatedProduct) {
+        throw new Error("Product not found");
+      }
+  
+      return updatedProduct;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       throw error;
     }
   }
+  
 
   static async addListOfProducts() {
     try {

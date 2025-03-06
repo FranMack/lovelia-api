@@ -1,8 +1,10 @@
 const ProductServices = require("../services/product.services");
 class ProductControllers {
-  static async addProduct(req, res) {
+
+
+  static async newOrUpdatedProduct(req, res) {
     try {
-      const newProduct = await ProductServices.addProduct(req.body);
+      const newProduct = await ProductServices.newOrUpdatedProduct(req.body);
 
       res.status(200).json(newProduct);
     } catch (error) {

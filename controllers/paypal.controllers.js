@@ -3,6 +3,7 @@ const { envs } = require("../config/env.config");
 class PaypalControllers {
   static async createOrder(req, res) {
     try {
+      
       const generateOrder = await PaypalServices.createOrder(req.body);
 
       res.send({ link_de_pago: generateOrder.data.links[1].href });
