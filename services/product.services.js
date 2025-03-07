@@ -5,7 +5,7 @@ class ProductServices {
   static async newOrUpdatedProduct(data) {
     try {
       const { productId, ...restData } = data;
-  
+
       if (!productId) {
         const newProduct = await Product.create(restData);
         if (!newProduct) {
@@ -13,9 +13,7 @@ class ProductServices {
         }
         return newProduct;
       }
-  
-    
-  
+
       const updatedProduct = await Product.findByIdAndUpdate(
         productId,
         { $set: restData },
@@ -25,19 +23,17 @@ class ProductServices {
       if (!updatedProduct) {
         throw new Error("Product not found");
       }
-  
+
       return updatedProduct;
     } catch (error) {
       console.error(error);
       throw error;
     }
   }
-  
 
   static async addListOfProducts() {
     try {
-
-      console.log("list",productList)
+      console.log("list", productList);
       const newListOfProducts = await Product.insertMany(productList);
 
       return;
@@ -71,9 +67,7 @@ class ProductServices {
         throw new Error("Product not found");
       }
 
-      const productHasStock = product.stock > 0 ? true : false;
-
-     return productHasStock
+      return product.stock > 0;
     } catch (error) {
       console.log(error);
       throw error;
