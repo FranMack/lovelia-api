@@ -25,11 +25,11 @@ const { filterNatalHoroscope } = require("../helpers/filterNatalHoroscope");
 const { chineseInformation } = require("../helpers/filterChineseInfo");
 const { calcKinMaya } = require("../helpers/filterKinMaya");
 const { transformSolarSail } = require("../helpers/filterKinMaya");
-const fs = require("fs");
 const path = require("path");
 const { timeConverter } = require("../helpers/getDate");
 const { Storage } = require("@google-cloud/storage");
 
+const {googleCloudCredentials}=require("../googleCloudCredentials")
 class UserServices {
   static async register(data) {
     try {
@@ -300,9 +300,11 @@ class UserServices {
   }
 
   static async getUserAstroInfo(email) {
+   
+
     const storage = new Storage({
-      projectId: "leafy-bond-427721-f6", // Reemplaza con tu Project ID
-      keyFilename: path.join(__dirname, "../googleCloudCredentials.json"), // Ruta al archivo de credenciales
+      projectId: googleCloudCredentials.project_id,
+      credentials: googleCloudCredentials, // Use the dynamic object
     });
 
     const bucketName = "threejs-api"; // Reemplaza con el nombre de tu bucket
@@ -484,9 +486,11 @@ class UserServices {
   }
 
   static async cleanUserJSON(email) {
+   
+
     const storage = new Storage({
-      projectId: "leafy-bond-427721-f6", // Reemplaza con tu Project ID
-      keyFilename: path.join(__dirname, "../googleCloudCredentials.json"), // Ruta al archivo de credenciales
+      projectId: googleCloudCredentials.project_id,
+      credentials: googleCloudCredentials, // Use the dynamic object
     });
 
     const bucketName = "threejs-api"; // Reemplaza con el nombre de tu bucket

@@ -15,6 +15,7 @@ const path = require("path");
 const { envs } = require("../config/env.config");
 
 const { Storage } = require("@google-cloud/storage");
+const {googleCloudCredentials}=require("../googleCloudCredentials")
 
 class UserControllers {
   static async register(req, res) {
@@ -289,8 +290,8 @@ class UserControllers {
 
   static async meditations(req, res) {
     const storage = new Storage({
-      projectId: "leafy-bond-427721-f6", // Reemplaza con tu Project ID
-      keyFilename: path.join(__dirname, "../googleCloudCredentials.json"), // Ruta al archivo de credenciales
+      projectId: googleCloudCredentials.project_id,
+      credentials: googleCloudCredentials, // Use the dynamic object
     });
 
     const bucketName = "threejs-api"; // Nombre del bucket
@@ -316,8 +317,8 @@ class UserControllers {
 
   static async sounds(req, res) {
     const storage = new Storage({
-      projectId: "leafy-bond-427721-f6", // Reemplaza con tu Project ID
-      keyFilename: path.join(__dirname, "../googleCloudCredentials.json"), // Ruta al archivo de credenciales
+      projectId: googleCloudCredentials.project_id,
+      credentials: googleCloudCredentials, // Use the dynamic object
     });
 
     const bucketName = "threejs-api"; // Nombre del bucket
@@ -345,10 +346,9 @@ class UserControllers {
 
   static async timerSounds(req, res) {
     const storage = new Storage({
-      projectId: "leafy-bond-427721-f6", // Reemplaza con tu Project ID
-      keyFilename: path.join(__dirname, "../googleCloudCredentials.json"), // Ruta al archivo de credenciales
+      projectId: googleCloudCredentials.project_id,
+      credentials: googleCloudCredentials, // Use the dynamic object
     });
-
     const bucketName = "threejs-api"; // Nombre del bucket
 
     try {
