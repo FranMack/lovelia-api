@@ -15,7 +15,7 @@ const path = require("path");
 const { envs } = require("../config/env.config");
 
 const { Storage } = require("@google-cloud/storage");
-const {googleCloudCredentials}=require("../googleCloudCredentials")
+const { googleCloudCredentials } = require("../googleCloudCredentials");
 
 class UserControllers {
   static async register(req, res) {
@@ -342,8 +342,6 @@ class UserControllers {
     }
   }
 
-
-
   static async timerSounds(req, res) {
     const storage = new Storage({
       projectId: googleCloudCredentials.project_id,
@@ -389,7 +387,7 @@ class UserControllers {
       const { fcmToken } = req.params;
       const { email } = req.user;
 
-      console.log("tokennnnnnnnnnnnnnnn",fcmToken)
+      console.log("tokennnnnnnnnnnnnnnn", fcmToken);
       const saveToken = await UserServices.sessionFmcToken(email, fcmToken);
 
       res.send(req.user);
